@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug"
+			"value" : "c:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -647,7 +647,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/Erfan/Dev/Cpp/SUTSpice"
+			"value" : "C:/Users/Erfan/Dev/Cpp/sutSpice2"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -659,7 +659,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/SUTSpice"
+			"value" : "C:/Program Files (x86)/sutSpice2"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -875,7 +875,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "SUTSpice"
+			"value" : "sutSpice2"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1270,7 +1270,19 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "SUTSpice_BINARY_DIR",
+			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "linker supports push/pop state"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "FALSE"
+		},
+		{
+			"name" : "sutSpice2_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1279,10 +1291,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug"
+			"value" : "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug"
 		},
 		{
-			"name" : "SUTSpice_IS_TOP_LEVEL",
+			"name" : "sutSpice2_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1294,7 +1306,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "SUTSpice_SOURCE_DIR",
+			"name" : "sutSpice2_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1303,19 +1315,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Erfan/Dev/Cpp/SUTSpice"
-		},
-		{
-			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "linker supports push/pop state"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "FALSE"
+			"value" : "C:/Users/Erfan/Dev/Cpp/sutSpice2"
 		}
 	],
 	"kind" : "cache",

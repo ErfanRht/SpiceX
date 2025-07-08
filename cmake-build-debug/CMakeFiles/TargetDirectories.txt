@@ -1,3 +1,3 @@
-C:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug/CMakeFiles/SUTSpice.dir
-C:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Erfan/Dev/Cpp/SUTSpice/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/sutSpice2.dir
+C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
