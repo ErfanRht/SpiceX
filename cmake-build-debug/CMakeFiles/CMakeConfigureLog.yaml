@@ -28,7 +28,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
       
       The C compiler identification is GNU, found in:
-        C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/3.29.6/CompilerIdC/a.exe
+        C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/3.29.6/CompilerIdC/a.exe
       
   -
     kind: "message-v1"
@@ -50,7 +50,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
       
       The CXX compiler identification is GNU, found in:
-        C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/3.29.6/CompilerIdCXX/a.exe
+        C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/3.29.6/CompilerIdCXX/a.exe
       
   -
     kind: "try_compile-v1"
@@ -61,8 +61,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fqjuvu"
-      binary: "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fqjuvu"
+      source: "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o"
+      binary: "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -71,18 +71,21 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fqjuvu'
+        Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o'
         
-        Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_56359
-        [1/2] C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -c "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCCompilerABI.c"
+        Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/bin/cmake.exe" -E env VERBOSE=1 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe -f Makefile cmTC_1f456/fast
+        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_1f456.dir\\build.make CMakeFiles/cmTC_1f456.dir/build
+        mingw32-make.exe[1]: Entering directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o'
+        Building C object CMakeFiles/cmTC_1f456.dir/CMakeCCompilerABI.c.obj
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe   -fdiagnostics-color=always   -v -o CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
         Using built-in specs.
         COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe
         Target: mingw32
         Configured with: ../../../src/gcc-5.1.0/configure --build=mingw32 --enable-languages=ada,c,c++,fortran,lto,objc,obj-c++ --enable-libgomp --enable-lto --enable-graphite --enable-libstdcxx-debug --enable-threads=posix --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libstdcxx-threads --enable-libstdcxx-time --with-gnu-ld --disable-werror --disable-nls --disable-win32-registry --disable-symvers --enable-cxx-flags='-fno-function-sections -fno-data-sections -DWINPTHREAD_STATIC' --prefix=/mingw32tdm --with-local-prefix=/mingw32tdm --with-pkgversion=tdm-1 --enable-sjlj-exceptions --with-bugurl=http://tdm-gcc.tdragon.net/bugs
         Thread model: posix
         gcc version 5.1.0 (tdm-1) 
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccPjlrTX.s
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\cc9KLSRd.s
         GNU C11 (tdm-1) version 5.1.0 (mingw32)
         	compiled by GNU C version 5.1.0, GMP version 4.3.2, MPFR version 2.4.2, MPC version 0.8.2
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
@@ -101,13 +104,17 @@ events:
         	compiled by GNU C version 5.1.0, GMP version 4.3.2, MPFR version 2.4.2, MPC version 0.8.2
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 2682432a7094ac8df846b6a707cdc762
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccPjlrTX.s
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\cc9KLSRd.s
         GNU assembler version 2.24 (mingw32) using BFD version (GNU Binutils) 2.24
         COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/
-        LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../\x0d
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'\x0d
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe  -v -Wl,-v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -o cmTC_56359.exe -Wl,--out-implib,libcmTC_56359.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && cd ."
+        LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+        Linking C executable cmTC_1f456.exe
+        "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_1f456.dir\\link.txt --verbose=1
+        "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_1f456.dir/objects.a
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\ar.exe qc CMakeFiles\\cmTC_1f456.dir/objects.a @CMakeFiles\\cmTC_1f456.dir\\objects1.rsp
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a -Wl,--no-whole-archive -o cmTC_1f456.exe -Wl,--out-implib,libcmTC_1f456.dll.a -Wl,--major-image-version,0,--minor-image-version,0
         Using built-in specs.
         COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe
         COLLECT_LTO_WRAPPER=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe
@@ -117,11 +124,12 @@ events:
         gcc version 5.1.0 (tdm-1) 
         COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/
         LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_56359.exe' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccfH2ED3.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_56359.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_56359.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1f456.exe' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccLh9tbB.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_1f456.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a --no-whole-archive --out-implib libcmTC_1f456.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
         collect2 version 5.1.0
-        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccfH2ED3.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_56359.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_56359.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o\x0d
-        GNU ld (GNU Binutils) 2.24\x0d
+        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccLh9tbB.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_1f456.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a --no-whole-archive --out-implib libcmTC_1f456.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
+        GNU ld (GNU Binutils) 2.24
+        mingw32-make.exe[1]: Leaving directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o'
         
       exitCode: 0
   -
@@ -154,18 +162,21 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
-        ignore line: [Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fqjuvu']
+        ignore line: [Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o']
         ignore line: []
-        ignore line: [Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_56359]
-        ignore line: [[1/2] C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -c "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCCompilerABI.c"]
+        ignore line: [Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/bin/cmake.exe" -E env VERBOSE=1 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe -f Makefile cmTC_1f456/fast]
+        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_1f456.dir\\build.make CMakeFiles/cmTC_1f456.dir/build]
+        ignore line: [mingw32-make.exe[1]: Entering directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-99ni1o']
+        ignore line: [Building C object CMakeFiles/cmTC_1f456.dir/CMakeCCompilerABI.c.obj]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe   -fdiagnostics-color=always   -v -o CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe]
         ignore line: [Target: mingw32]
         ignore line: [Configured with: ../../../src/gcc-5.1.0/configure --build=mingw32 --enable-languages=ada,c,c++,fortran,lto,objc,obj-c++ --enable-libgomp --enable-lto --enable-graphite --enable-libstdcxx-debug --enable-threads=posix --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libstdcxx-threads --enable-libstdcxx-time --with-gnu-ld --disable-werror --disable-nls --disable-win32-registry --disable-symvers --enable-cxx-flags='-fno-function-sections -fno-data-sections -DWINPTHREAD_STATIC' --prefix=/mingw32tdm --with-local-prefix=/mingw32tdm --with-pkgversion=tdm-1 --enable-sjlj-exceptions --with-bugurl=http://tdm-gcc.tdragon.net/bugs]
         ignore line: [Thread model: posix]
         ignore line: [gcc version 5.1.0 (tdm-1) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro']
-        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccPjlrTX.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\cc9KLSRd.s]
         ignore line: [GNU C11 (tdm-1) version 5.1.0 (mingw32)]
         ignore line: [	compiled by GNU C version 5.1.0  GMP version 4.3.2  MPFR version 2.4.2  MPC version 0.8.2]
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
@@ -184,8 +195,8 @@ events:
         ignore line: [	compiled by GNU C version 5.1.0  GMP version 4.3.2  MPFR version 2.4.2  MPC version 0.8.2]
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 2682432a7094ac8df846b6a707cdc762]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro']
-        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccPjlrTX.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\cc9KLSRd.s]
         ignore line: [GNU assembler version 2.24 (mingw32) using BFD version (GNU Binutils) 2.24]
         ignore line: [COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/]
@@ -193,9 +204,13 @@ events:
         ignore line: [LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/]
-        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../\x0d]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro'\x0d]
-        ignore line: [[2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe  -v -Wl -v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj -o cmTC_56359.exe -Wl --out-implib libcmTC_56359.dll.a -Wl --major-image-version 0 --minor-image-version 0   && cd ."]
+        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_1f456.dir\\CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [Linking C executable cmTC_1f456.exe]
+        ignore line: ["C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_1f456.dir\\link.txt --verbose=1]
+        ignore line: ["C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_1f456.dir/objects.a]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\ar.exe qc CMakeFiles\\cmTC_1f456.dir/objects.a @CMakeFiles\\cmTC_1f456.dir\\objects1.rsp]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe  -v -Wl -v -Wl --whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a -Wl --no-whole-archive -o cmTC_1f456.exe -Wl --out-implib libcmTC_1f456.dll.a -Wl --major-image-version 0 --minor-image-version 0]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\gcc.exe]
         ignore line: [COLLECT_LTO_WRAPPER=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe]
@@ -210,13 +225,13 @@ events:
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_56359.exe' '-mtune=generic' '-march=pentiumpro']
-        link line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccfH2ED3.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_56359.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_56359.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1f456.exe' '-mtune=generic' '-march=pentiumpro']
+        link line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccLh9tbB.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_1f456.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a --no-whole-archive --out-implib libcmTC_1f456.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe] ==> ignore
           arg [-plugin] ==> ignore
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll] ==> ignore
           arg [-plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe] ==> ignore
-          arg [-plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccfH2ED3.res] ==> ignore
+          arg [-plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccLh9tbB.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
@@ -235,7 +250,7 @@ events:
           arg [--exclude-libs=libpthread.a] ==> ignore
           arg [-Bdynamic] ==> search dynamic
           arg [-o] ==> ignore
-          arg [cmTC_56359.exe] ==> ignore
+          arg [cmTC_1f456.exe] ==> ignore
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o]
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0]
@@ -243,9 +258,11 @@ events:
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib]
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../..] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../..]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj] ==> ignore
+          arg [--whole-archive] ==> ignore
+          arg [CMakeFiles\\cmTC_1f456.dir/objects.a] ==> ignore
+          arg [--no-whole-archive] ==> ignore
           arg [--out-implib] ==> ignore
-          arg [libcmTC_56359.dll.a] ==> ignore
+          arg [libcmTC_1f456.dll.a] ==> ignore
           arg [--major-image-version] ==> ignore
           arg [0] ==> ignore
           arg [--minor-image-version] ==> ignore
@@ -267,7 +284,7 @@ events:
           arg [-lmsvcrt] ==> lib [msvcrt]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
         ignore line: [collect2 version 5.1.0]
-        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccfH2ED3.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_56359.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_56359.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_56359.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o\x0d]
+        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccLh9tbB.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_1f456.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_1f456.dir/objects.a --no-whole-archive --out-implib libcmTC_1f456.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
         linker tool for 'C': C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/mingw32/bin/ld.exe
         remove lib [msvcrt]
         remove lib [msvcrt]
@@ -303,8 +320,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-aul54v"
-      binary: "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-aul54v"
+      source: "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n"
+      binary: "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -314,18 +331,21 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-aul54v'
+        Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n'
         
-        Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_7be6c
-        [1/2] C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -c "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp"
+        Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/bin/cmake.exe" -E env VERBOSE=1 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe -f Makefile cmTC_e888a/fast
+        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_e888a.dir\\build.make CMakeFiles/cmTC_e888a.dir/build
+        mingw32-make.exe[1]: Entering directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n'
+        Building CXX object CMakeFiles/cmTC_e888a.dir/CMakeCXXCompilerABI.cpp.obj
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe   -fdiagnostics-color=always   -v -o CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
         Using built-in specs.
         COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe
         Target: mingw32
         Configured with: ../../../src/gcc-5.1.0/configure --build=mingw32 --enable-languages=ada,c,c++,fortran,lto,objc,obj-c++ --enable-libgomp --enable-lto --enable-graphite --enable-libstdcxx-debug --enable-threads=posix --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libstdcxx-threads --enable-libstdcxx-time --with-gnu-ld --disable-werror --disable-nls --disable-win32-registry --disable-symvers --enable-cxx-flags='-fno-function-sections -fno-data-sections -DWINPTHREAD_STATIC' --prefix=/mingw32tdm --with-local-prefix=/mingw32tdm --with-pkgversion=tdm-1 --enable-sjlj-exceptions --with-bugurl=http://tdm-gcc.tdragon.net/bugs
         Thread model: posix
         gcc version 5.1.0 (tdm-1) 
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\cckZhsCe.s
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccl8DfR2.s
         GNU C++ (tdm-1) version 5.1.0 (mingw32)
         	compiled by GNU C version 5.1.0, GMP version 4.3.2, MPFR version 2.4.2, MPC version 0.8.2
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
@@ -350,13 +370,17 @@ events:
         	compiled by GNU C version 5.1.0, GMP version 4.3.2, MPFR version 2.4.2, MPC version 0.8.2
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 2e47d181020f054da881eda9fc3e9f75
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\cckZhsCe.s
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccl8DfR2.s
         GNU assembler version 2.24 (mingw32) using BFD version (GNU Binutils) 2.24
         COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/
         LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../
-        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'\x0d
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe  -v -Wl,-v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_7be6c.exe -Wl,--out-implib,libcmTC_7be6c.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && cd ."
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'
+        Linking CXX executable cmTC_e888a.exe
+        "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_e888a.dir\\link.txt --verbose=1
+        "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_e888a.dir/objects.a
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\ar.exe qc CMakeFiles\\cmTC_e888a.dir/objects.a @CMakeFiles\\cmTC_e888a.dir\\objects1.rsp
+        C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a -Wl,--no-whole-archive -o cmTC_e888a.exe -Wl,--out-implib,libcmTC_e888a.dll.a -Wl,--major-image-version,0,--minor-image-version,0
         Using built-in specs.
         COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe
         COLLECT_LTO_WRAPPER=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe
@@ -366,11 +390,12 @@ events:
         gcc version 5.1.0 (tdm-1) 
         COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/
         LIBRARY_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/;C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_7be6c.exe' '-mtune=generic' '-march=pentiumpro'
-         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\cca4P02e.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_7be6c.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_7be6c.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e888a.exe' '-mtune=generic' '-march=pentiumpro'
+         C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccP5R9qg.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_e888a.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a --no-whole-archive --out-implib libcmTC_e888a.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
         collect2 version 5.1.0
-        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\cca4P02e.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_7be6c.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_7be6c.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o\x0d
-        GNU ld (GNU Binutils) 2.24\x0d
+        C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccP5R9qg.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_e888a.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a --no-whole-archive --out-implib libcmTC_e888a.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o
+        GNU ld (GNU Binutils) 2.24
+        mingw32-make.exe[1]: Leaving directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n'
         
       exitCode: 0
   -
@@ -409,18 +434,21 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
-        ignore line: [Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-aul54v']
+        ignore line: [Change Dir: 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n']
         ignore line: []
-        ignore line: [Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_7be6c]
-        ignore line: [[1/2] C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -c "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp"]
+        ignore line: [Run Build Command(s): "C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/bin/cmake.exe" -E env VERBOSE=1 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe -f Makefile cmTC_e888a/fast]
+        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_e888a.dir\\build.make CMakeFiles/cmTC_e888a.dir/build]
+        ignore line: [mingw32-make.exe[1]: Entering directory 'C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lnbk2n']
+        ignore line: [Building CXX object CMakeFiles/cmTC_e888a.dir/CMakeCXXCompilerABI.cpp.obj]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe   -fdiagnostics-color=always   -v -o CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe]
         ignore line: [Target: mingw32]
         ignore line: [Configured with: ../../../src/gcc-5.1.0/configure --build=mingw32 --enable-languages=ada,c,c++,fortran,lto,objc,obj-c++ --enable-libgomp --enable-lto --enable-graphite --enable-libstdcxx-debug --enable-threads=posix --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libstdcxx-threads --enable-libstdcxx-time --with-gnu-ld --disable-werror --disable-nls --disable-win32-registry --disable-symvers --enable-cxx-flags='-fno-function-sections -fno-data-sections -DWINPTHREAD_STATIC' --prefix=/mingw32tdm --with-local-prefix=/mingw32tdm --with-pkgversion=tdm-1 --enable-sjlj-exceptions --with-bugurl=http://tdm-gcc.tdragon.net/bugs]
         ignore line: [Thread model: posix]
         ignore line: [gcc version 5.1.0 (tdm-1) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro']
-        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:/Program Files/JetBrains/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\cckZhsCe.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/ -D_REENTRANT C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=pentiumpro -auxbase-strip CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj -version -fdiagnostics-color=always -o C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccl8DfR2.s]
         ignore line: [GNU C++ (tdm-1) version 5.1.0 (mingw32)]
         ignore line: [	compiled by GNU C version 5.1.0  GMP version 4.3.2  MPFR version 2.4.2  MPC version 0.8.2]
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
@@ -445,8 +473,8 @@ events:
         ignore line: [	compiled by GNU C version 5.1.0  GMP version 4.3.2  MPFR version 2.4.2  MPC version 0.8.2]
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 2e47d181020f054da881eda9fc3e9f75]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro']
-        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\cckZhsCe.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/as.exe -v -o CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccl8DfR2.s]
         ignore line: [GNU assembler version 2.24 (mingw32) using BFD version (GNU Binutils) 2.24]
         ignore line: [COMPILER_PATH=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/]
@@ -455,8 +483,12 @@ events:
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../]
-        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro'\x0d]
-        ignore line: [[2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe  -v -Wl -v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_7be6c.exe -Wl --out-implib libcmTC_7be6c.dll.a -Wl --major-image-version 0 --minor-image-version 0   && cd ."]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles\\cmTC_e888a.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-mtune=generic' '-march=pentiumpro']
+        ignore line: [Linking CXX executable cmTC_e888a.exe]
+        ignore line: ["C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_e888a.dir\\link.txt --verbose=1]
+        ignore line: ["C:\\Program Files\\JetBrains\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_e888a.dir/objects.a]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\ar.exe qc CMakeFiles\\cmTC_e888a.dir/objects.a @CMakeFiles\\cmTC_e888a.dir\\objects1.rsp]
+        ignore line: [C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe  -v -Wl -v -Wl --whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a -Wl --no-whole-archive -o cmTC_e888a.exe -Wl --out-implib libcmTC_e888a.dll.a -Wl --major-image-version 0 --minor-image-version 0]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=C:\\Users\\Erfan\\Dev\\Cpp\\MinGW\\MinGW\\bin\\c++.exe]
         ignore line: [COLLECT_LTO_WRAPPER=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe]
@@ -471,13 +503,13 @@ events:
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib/]
         ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_7be6c.exe' '-mtune=generic' '-march=pentiumpro']
-        link line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\cca4P02e.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_7be6c.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_7be6c.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e888a.exe' '-mtune=generic' '-march=pentiumpro']
+        link line: [ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccP5R9qg.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_e888a.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a --no-whole-archive --out-implib libcmTC_e888a.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/collect2.exe] ==> ignore
           arg [-plugin] ==> ignore
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll] ==> ignore
           arg [-plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe] ==> ignore
-          arg [-plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\cca4P02e.res] ==> ignore
+          arg [-plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccP5R9qg.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
@@ -496,7 +528,7 @@ events:
           arg [--exclude-libs=libpthread.a] ==> ignore
           arg [-Bdynamic] ==> search dynamic
           arg [-o] ==> ignore
-          arg [cmTC_7be6c.exe] ==> ignore
+          arg [cmTC_e888a.exe] ==> ignore
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o]
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0]
@@ -504,9 +536,11 @@ events:
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib]
           arg [-LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../..] ==> dir [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../..]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
+          arg [--whole-archive] ==> ignore
+          arg [CMakeFiles\\cmTC_e888a.dir/objects.a] ==> ignore
+          arg [--no-whole-archive] ==> ignore
           arg [--out-implib] ==> ignore
-          arg [libcmTC_7be6c.dll.a] ==> ignore
+          arg [libcmTC_e888a.dll.a] ==> ignore
           arg [--major-image-version] ==> ignore
           arg [0] ==> ignore
           arg [--minor-image-version] ==> ignore
@@ -531,7 +565,7 @@ events:
           arg [-lmsvcrt] ==> lib [msvcrt]
           arg [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o] ==> obj [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
         ignore line: [collect2 version 5.1.0]
-        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\cca4P02e.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_7be6c.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v CMakeFiles/cmTC_7be6c.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_7be6c.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o\x0d]
+        ignore line: [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/bin/ld.exe -plugin C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/liblto_plugin-0.dll -plugin-opt=C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../libexec/gcc/mingw32/5.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\Erfan\\AppData\\Local\\Temp\\ccP5R9qg.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt --exclude-libs=libpthread.a -Bdynamic -o cmTC_e888a.exe C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../crt2.o C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtbegin.o -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0 -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../../../mingw32/lib -LC:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/../../.. -v --whole-archive CMakeFiles\\cmTC_e888a.dir/objects.a --no-whole-archive --out-implib libcmTC_e888a.dll.a --major-image-version 0 --minor-image-version 0 -Bstatic -lstdc++ -Bdynamic -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lmoldname -lmingwex -lmsvcrt C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/bin/../lib/gcc/mingw32/5.1.0/crtend.o]
         linker tool for 'CXX': C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/mingw32/bin/ld.exe
         search lib [SEARCH_STATIC:stdc++] ==> [C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/libstdc++.a]
         remove lib [msvcrt]

@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2024.2.1\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\sutSpice2.dir/objects.a
+C:\Users\Erfan\Dev\Cpp\MinGW\MinGW\bin\ar.exe qc CMakeFiles\sutSpice2.dir/objects.a @CMakeFiles\sutSpice2.dir\objects1.rsp
+C:\Users\Erfan\Dev\Cpp\MinGW\MinGW\bin\c++.exe -g -Wl,--whole-archive CMakeFiles\sutSpice2.dir/objects.a -Wl,--no-whole-archive -o sutSpice2.exe -Wl,--out-implib,libsutSpice2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\sutSpice2.dir\linkLibs.rsp

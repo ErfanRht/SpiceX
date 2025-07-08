@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Erfan/Dev/Cpp/sutSpice2/cmake-build-debug",
-		"source" : "C:/Users/Erfan/Dev/Cpp/sutSpice2"
+		"build" : "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/cmake-build-debug",
+		"source" : "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2"
 	},
 	"version" : 
 	{

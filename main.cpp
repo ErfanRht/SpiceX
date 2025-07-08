@@ -132,7 +132,7 @@ int main(int argc, char* args[]) {
     TTF_Font* font = TTF_OpenFont(R"(C:\Windows\Fonts\arial.ttf)", 16);
     if (!window || !renderer || !font) { cerr << "Window, renderer, or font creation failed." << endl; return -1; }
 
-    const string ASSET_PATH = "C:/Users/Erfan/Dev/Cpp/sutSpice2/assets/";
+    const string ASSET_PATH = "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/assets/";
 
     vector<Button> topBarButtons;
     topBarButtons.emplace_back("File", 10, 5, 80, 30, [](){ isFileMenuOpen = !isFileMenuOpen; isComponentsMenuOpen = false; isSimulateMenuOpen = false; });
