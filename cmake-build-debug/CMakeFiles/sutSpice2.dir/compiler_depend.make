@@ -52,7 +52,6 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/begin_code.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/close_code.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/_mingw.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/assert.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/basetsd.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/basetyps.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/cderr.h \
@@ -63,9 +62,7 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/ddeml.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/dlgs.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/errno.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/fenv.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/imm.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/inttypes.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/limits.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/locale.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/lzexpand.h \
@@ -94,7 +91,6 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnsi.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnsip.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnterr.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/setjmp.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/shellapi.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/signal.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/stdint.h \
@@ -145,7 +141,6 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/bmiintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/algorithm \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/array \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/atomic \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/backward/auto_ptr.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/backward/binders.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/algorithmfwd.h \
@@ -153,7 +148,6 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/allocated_ptr.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/allocator.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/atomic_base.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/atomic_futex.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/atomic_lockfree_defines.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/basic_ios.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/basic_ios.tcc \
@@ -164,23 +158,14 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/concept_check.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/cpp_type_traits.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/cxxabi_forced.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/deque.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/exception_defines.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/exception_ptr.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/forward_list.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/forward_list.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/fstream.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/functexcept.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/functional_hash.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/gslice.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/gslice_array.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hash_bytes.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hashtable.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hashtable_policy.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/indirect_array.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ios_base.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/istream.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/list.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_classes.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_classes.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_conv.h \
@@ -189,105 +174,59 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_facets_nonio.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_facets_nonio.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/localefwd.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/mask_array.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/memoryfwd.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/move.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/nested_exception.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ostream.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ostream_insert.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/parse_numbers.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/postypes.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/predefined_ops.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ptr_traits.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/random.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/random.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/range_access.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_automaton.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_automaton.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_compiler.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_compiler.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_constants.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_error.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_executor.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_executor.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_scanner.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_scanner.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/shared_ptr.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/shared_ptr_atomic.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/shared_ptr_base.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/slice_array.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/sstream.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_algo.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_algobase.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_bvector.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_construct.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_deque.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_function.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_heap.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_iterator.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_iterator_base_funcs.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_iterator_base_types.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_list.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_map.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_multimap.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_multiset.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_numeric.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_pair.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_queue.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_raw_storage_iter.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_relops.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_set.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_stack.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_tempbuf.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_tree.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_uninitialized.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_vector.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stream_iterator.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/streambuf.tcc \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/streambuf_iterator.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stringfwd.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unique_ptr.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unordered_map.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unordered_set.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/uses_allocator.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_after.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_array.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_array.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_before.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/vector.tcc \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bitset \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cassert \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ccomplex \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cctype \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cerrno \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfenv \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfloat \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/chrono \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cinttypes \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ciso646 \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/climits \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/clocale \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cmath \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/complex \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/condition_variable \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/csetjmp \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/csignal \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdalign \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdarg \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdbool \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstddef \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdint \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdio \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdlib \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstring \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ctgmath \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ctime \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cwchar \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cwctype \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/debug/debug.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/deque \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/exception \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/aligned_buffer.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/alloc_traits.h \
@@ -297,20 +236,15 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/numeric_traits.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/string_conversions.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/type_traits.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/fenv.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/forward_list \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/fstream \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/functional \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/future \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/initializer_list \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/iomanip \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ios \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/iosfwd \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/iostream \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/istream \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/iterator \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/limits \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/list \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/locale \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/map \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/memory \
@@ -329,39 +263,26 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/messages_members.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/opt_random.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/os_defines.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/stdc++.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/time_members.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mutex \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/new \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/numeric \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ostream \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/queue \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/random \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ratio \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/regex \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/scoped_allocator \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/set \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/sstream \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/stack \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/stdexcept \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/streambuf \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/string \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/system_error \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/thread \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/tuple \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/type_traits \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/typeindex \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/typeinfo \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/unordered_map \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/unordered_set \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/utility \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/valarray \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/vector \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/clflushoptintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/clwbintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/emmintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/f16cintrin.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/float.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fma4intrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fmaintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fxsrintrin.h \
@@ -380,9 +301,7 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/rtmintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/shaintrin.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/smmintrin.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdalign.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdarg.h \
-  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdbool.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stddef.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdint.h \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/tbmintrin.h \
@@ -401,8 +320,6 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_blendmode.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/rdseedintrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/list.tcc:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/winerror.h:
 
@@ -423,8 +340,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_metal.h:
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_assert.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_atomic.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hashtable.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/wincon.h:
 
@@ -458,8 +373,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_sensor.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_error.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/condition_variable:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_events.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/map:
@@ -474,12 +387,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/unknwn.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_touch.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/thread:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdarg:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/csetjmp:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_gesture.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/locale_conv.h:
@@ -488,11 +395,11 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_haptic.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_hints.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/fenv.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_image.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_keyboard.h:
+
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/locale.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/dlgs.h:
 
@@ -540,8 +447,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_quit.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/close_code.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mutex:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/wctype.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/SDL_rect.h:
@@ -572,12 +477,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_co
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/SDL2/begin_code.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/char_traits.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/assert.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_stack.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/basetsd.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/cderr.h:
@@ -590,13 +489,7 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/windef.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/imm.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/inttypes.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/limits.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/locale.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/queue:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/basic_string.tcc:
 
@@ -611,8 +504,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/mmsystem.h:
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/new:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/nb30.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_after.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/winnetwk.h:
 
@@ -634,8 +525,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_re
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/oleauto.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/deque:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/oleidl.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/poppack.h:
@@ -654,8 +543,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/pshpack4.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/pthread.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cassert:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/allocated_ptr.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/pthread_unistd.h:
@@ -665,10 +552,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpc.h:
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/atomic_base.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcdce.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/list:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_executor.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/sys/types.h:
 
@@ -680,13 +563,9 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcndr.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnsi.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stream_iterator.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnsip.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/rpcnterr.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/setjmp.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/shellapi.h:
 
@@ -732,8 +611,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/popcntintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/f16cintrin.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_executor.tcc:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/alloc_traits.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/winnls.h:
@@ -762,13 +639,9 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/include/wtypes.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/adxintrin.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/climits:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/ammintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx2intrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ctgmath:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512bwintrin.h:
 
@@ -780,15 +653,11 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bit
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512erintrin.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/indirect_array.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512fintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512ifmaintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512ifmavlintrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/atomic_futex.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avx512pfintrin.h:
 
@@ -802,21 +671,13 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/streambuf:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/random:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/fenv.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/avxintrin.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/typeindex:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/bmi2intrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/bmiintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/array:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/atomic:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/istream.tcc:
 
@@ -840,6 +701,8 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/basic_
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/basic_string.h:
 
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/char_traits.h:
+
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/lwpintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/codecvt.h:
@@ -852,37 +715,17 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_mu
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/cxxabi_forced.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unique_ptr.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/deque.tcc:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ptr_traits.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/exception_defines.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/exception_ptr.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/forward_list.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bitset:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/forward_list.tcc:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/fstream.tcc:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/functexcept.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_deque.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/functional_hash.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/gslice.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/postypes.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hashtable_policy.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/gslice_array.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/hash_bytes.h:
 
@@ -902,8 +745,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/clwbintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/localefwd.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/mask_array.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/memoryfwd.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/move.h:
@@ -916,41 +757,13 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ostrea
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/ostream_insert.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/debug/debug.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/parse_numbers.h:
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/postypes.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/predefined_ops.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/random.tcc:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/range_access.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fma4intrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex.tcc:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_automaton.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/slice_array.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_automaton.tcc:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_compiler.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_compiler.tcc:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_constants.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_error.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_list.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_scanner.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/smmintrin.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/regex_scanner.tcc:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/shared_ptr.h:
 
@@ -974,23 +787,13 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_it
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_iterator_base_types.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfloat:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_map.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_multiset.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/valarray:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unordered_map.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_numeric.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/csignal:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_pair.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_queue.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_set.h:
 
@@ -1006,65 +809,33 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/stl_ve
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/streambuf_iterator.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unordered_set.h:
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/unique_ptr.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/uses_allocator.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ccomplex:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_array.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_array.tcc:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/exception:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/valarray_before.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/vector.tcc:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cerrno:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfenv:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/chrono:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cinttypes:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ciso646:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/clocale:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cmath:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/complex:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdalign:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdbool:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstddef:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdint:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/iterator:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstring:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ctime:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cwchar:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/regex:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cwctype:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/stdc++.h:
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/debug/debug.h:
+
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/exception:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/messages_members.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/aligned_buffer.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdbool.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/alloc_traits.h:
 
@@ -1076,13 +847,9 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/numeric
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ext/type_traits.h:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/forward_list:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/fstream:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/functional:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/future:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/initializer_list:
 
@@ -1102,8 +869,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/pcommitintrin.h
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/memory:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdalign.h:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/basic_file.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/c++io.h:
@@ -1111,8 +876,6 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bit
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/cpu_defines.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/ctype_base.h:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/float.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/ctype_inline.h:
 
@@ -1130,29 +893,21 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/numeric:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ostream:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/ratio:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/scoped_allocator:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/set:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/sstream:
 
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/stack:
-
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/stdexcept:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/typeinfo:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/unordered_map:
-
-C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/unordered_set:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/utility:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/vector:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/emmintrin.h:
+
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fma4intrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/fmaintrin.h:
 
@@ -1167,6 +922,8 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/mm_malloc.h:
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/pmmintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/rtmintrin.h:
+
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/smmintrin.h:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/stdarg.h:
 
