@@ -21,12 +21,7 @@
 #include <iomanip>
 #include <fstream>
 #include <numeric>
-
-// Windows specific for directory listing
-#ifdef _WIN32
-#include <windows.h>
-#include <direct.h>
-#endif
+#include <cfloat> // For DBL_MAX
 
 using namespace std;
 
@@ -40,6 +35,28 @@ const int COMPONENT_DEFAULT_LENGTH = GRID_SPACING * 4;
 const string BASE_PATH = "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/";
 const string ASSET_PATH = BASE_PATH + "assets/";
 const string SCHEMATICS_PATH = BASE_PATH + "schematics/";
+
+// --- Application State ---
+enum class AppState {
+    SCHEMATIC_EDITOR,
+    RESULTS_VIEW
+};
+AppState currentAppState = AppState::SCHEMATIC_EDITOR;
+
+struct PlottedVariable {
+    string name;
+    SDL_Color color;
+};
+vector<PlottedVariable> plotted_variables;
+
+// --- Graph Scaling State ---
+struct ScaleSettings {
+    string x_min_str, x_max_str, y_min_str, y_max_str;
+};
+ScaleSettings manual_scale;
+bool show_scale_dialog = false;
+int cursor_index = 0;
+
 
 // --- Utility Functions (Shared) ---
 inline string to_lower_util(string s) {
@@ -57,6 +74,35 @@ string trim_string_util(const string& str) {
     size_t end = str.find_last_not_of(whitespace);
     return str.substr(start, end - start + 1);
 }
+
+// New function to format values with metric prefixes
+string format_value_with_metric_prefix(double value) {
+    if (abs(value) < 1e-15) {
+        return "0.0";
+    }
+
+    const char* prefixes[] = {"p", "n", "u", "m", "", "k", "M", "G"};
+    int prefix_index = 4; // Index for "" (no prefix)
+
+    double abs_val = abs(value);
+
+    if (abs_val >= 1.0) {
+        while (abs_val >= 1000.0 && prefix_index < 7) {
+            abs_val /= 1000.0;
+            prefix_index++;
+        }
+    } else {
+        while (abs_val < 1.0 && prefix_index > 0) {
+            abs_val *= 1000.0;
+            prefix_index--;
+        }
+    }
+
+    ostringstream oss;
+    oss << fixed << setprecision(2) << (value < 0 ? -abs_val : abs_val) << prefixes[prefix_index];
+    return oss.str();
+}
+
 
 double parse_value_with_metric_prefix_util(const string& val_str_orig) {
     string val_str = trim_string_util(val_str_orig);
@@ -270,9 +316,12 @@ namespace SpiceEngine {
         vector<Component*> ccvs_list;
         bool tran_solved = false;
         vector<ResultPoint> tran_results;
+        double tran_t_stop = 0.0;
         bool dc_sweep_solved = false;
         vector<ResultPoint> dc_sweep_results;
         string dc_sweep_source_name;
+        double dc_start = 0.0, dc_end = 0.0;
+
 
         void set_ground_node(const string& node_name) {
             ground_node_explicit_name = node_name;
@@ -560,6 +609,7 @@ namespace SpiceEngine {
         tran_solved = false;
         tran_results.clear();
         if (t_step <= 0 || t_stop <= 0 || t_step > t_stop) throw runtime_error("Invalid transient parameters.");
+        this->tran_t_stop = t_stop;
         int N = prepare_for_analysis();
         int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
         if (N + M == 0 && diode_list.empty()) {
@@ -612,6 +662,8 @@ namespace SpiceEngine {
         dc_sweep_solved = false;
         dc_sweep_results.clear();
         if (inc == 0 || (end > start && inc < 0) || (end < start && inc > 0)) throw runtime_error("Invalid sweep parameters.");
+        this->dc_start = start;
+        this->dc_end = end;
         Component* sweep_comp = nullptr;
         for (auto& c : components)
             if (c->name == src) {
@@ -669,6 +721,17 @@ namespace SpiceEngine {
 } // end namespace SpiceEngine
 
 // --- GUI Data Structures ---
+unique_ptr<SpiceEngine::Circuit> last_simulated_circuit;
+bool show_trace_dialog = false;
+string new_trace_buffer = "";
+int active_trace_dialog_field = -1;
+
+vector<SDL_Color> plot_colors = {
+        {255, 80, 80, 255}, {80, 255, 80, 255}, {80, 80, 255, 255},
+        {255, 255, 80, 255}, {80, 255, 255, 255}, {255, 80, 255, 255}
+};
+
+
 bool isFileMenuOpen = false;
 bool isComponentsMenuOpen = false;
 bool isSimulateMenuOpen = false;
@@ -996,11 +1059,11 @@ void draw_schematic_elements(SDL_Renderer* renderer, TTF_Font* valueFont, const 
 }
 
 // --- New Simulation Handler ---
-void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogField>& fields) {
+void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogField>& fields, unique_ptr<SpiceEngine::Circuit>& circuit_out) {
     cout << "\n--- Preparing Simulation ---" << endl;
 
     // 1. Build SpiceCircuit from GUI data
-    auto spice_circuit = make_unique<SpiceEngine::Circuit>();
+    circuit_out = make_unique<SpiceEngine::Circuit>();
 
     // Node Resolution Logic
     map<string, int> point_to_set_id;
@@ -1076,7 +1139,7 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
             if (point_to_set_id.count(key)) {
                 int root = find_set(point_to_set_id.at(key));
                 ground_node_name = set_to_node_name[root];
-                spice_circuit->set_ground_node(ground_node_name);
+                circuit_out->set_ground_node(ground_node_name);
                 break;
             }
         }
@@ -1092,11 +1155,11 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
         string n1 = get_node_name(comp.node1);
         string n2 = get_node_name(comp.node2);
         switch (comp.type) {
-            case ComponentType::RESISTOR: spice_circuit->add_component(make_unique<SpiceEngine::Resistor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::CAPACITOR: spice_circuit->add_component(make_unique<SpiceEngine::Capacitor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::INDUCTOR: spice_circuit->add_component(make_unique<SpiceEngine::Inductor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::DIODE: spice_circuit->add_component(make_unique<SpiceEngine::Diode>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::DC_CURRENT_SOURCE: spice_circuit->add_component(make_unique<SpiceEngine::CurrentSource>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::RESISTOR: circuit_out->add_component(make_unique<SpiceEngine::Resistor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::CAPACITOR: circuit_out->add_component(make_unique<SpiceEngine::Capacitor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::INDUCTOR: circuit_out->add_component(make_unique<SpiceEngine::Inductor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::DIODE: circuit_out->add_component(make_unique<SpiceEngine::Diode>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::DC_CURRENT_SOURCE: circuit_out->add_component(make_unique<SpiceEngine::CurrentSource>(comp.id, n1, n2, comp.value)); break;
             case ComponentType::DC_VOLTAGE_SOURCE:
             case ComponentType::AC_VOLTAGE_SOURCE: {
                 vector<string> params;
@@ -1107,7 +1170,7 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
                 } else {
                     params.push_back(comp.value);
                 }
-                spice_circuit->add_component(make_unique<SpiceEngine::VoltageSource>(comp.id, n1, n2, params));
+                circuit_out->add_component(make_unique<SpiceEngine::VoltageSource>(comp.id, n1, n2, params));
                 break;
             }
             default: break;
@@ -1116,22 +1179,23 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
 
     // 2. Run simulation and print results
     try {
-        vector<string> vars_to_print;
+        plotted_variables.clear();
+        vector<string> requested_vars;
         if (analysis_type == DialogType::TRANSIENT_ANALYSIS) {
             double t_step = parse_value_with_metric_prefix_util(fields[0].buffer);
             double t_stop = parse_value_with_metric_prefix_util(fields[1].buffer);
             stringstream ss(fields[2].buffer);
             string var;
-            while(ss >> var) { vars_to_print.push_back(var); }
+            while(ss >> var) { requested_vars.push_back(var); }
 
-            spice_circuit->perform_transient_analysis(t_step, t_stop);
+            circuit_out->perform_transient_analysis(t_step, t_stop);
 
             cout << left << setw(15) << "time (s)";
-            for (const auto& v : vars_to_print) cout << setw(15) << v;
+            for (const auto& v : requested_vars) cout << setw(15) << v;
             cout << endl;
-            for (const auto& result_point : spice_circuit->tran_results) {
+            for (const auto& result_point : circuit_out->tran_results) {
                 cout << fixed << setprecision(6) << setw(15) << result_point.at("time");
-                for (const auto& v : vars_to_print) {
+                for (const auto& v : requested_vars) {
                     try {
                         ostringstream val_ss;
                         val_ss << fixed << setprecision(6) << result_point.at(v);
@@ -1154,21 +1218,21 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
             double inc = parse_value_with_metric_prefix_util(fields[3].buffer);
             stringstream ss(fields[4].buffer);
             string var;
-            while(ss >> var) { vars_to_print.push_back(var); }
+            while(ss >> var) { requested_vars.push_back(var); }
 
-            spice_circuit->perform_dc_sweep_analysis(src_name, start, end, inc);
+            circuit_out->perform_dc_sweep_analysis(src_name, start, end, inc);
 
-            string header_src_name = spice_circuit->dc_sweep_source_name;
+            string header_src_name = circuit_out->dc_sweep_source_name;
             char src_name_char = to_lower_util(header_src_name)[0];
             if (src_name_char == 'v') header_src_name += " (V)";
             else if (src_name_char == 'i') header_src_name += " (A)";
             cout << left << setw(15) << header_src_name;
-            for (const auto& v : vars_to_print) cout << setw(15) << v;
+            for (const auto& v : requested_vars) cout << setw(15) << v;
             cout << endl;
 
-            for (const auto& result_point : spice_circuit->dc_sweep_results) {
-                cout << fixed << setprecision(6) << setw(15) << result_point.at(spice_circuit->dc_sweep_source_name);
-                for (const auto& v : vars_to_print) {
+            for (const auto& result_point : circuit_out->dc_sweep_results) {
+                cout << fixed << setprecision(6) << setw(15) << result_point.at(circuit_out->dc_sweep_source_name);
+                for (const auto& v : requested_vars) {
                     if (result_point.count(v)) {
                         ostringstream val_ss;
                         val_ss << fixed << setprecision(6) << result_point.at(v);
@@ -1184,8 +1248,14 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
                 cout << endl;
             }
         }
+        // Populate the plotted_variables vector for the GUI
+        for(size_t i = 0; i < requested_vars.size(); ++i) {
+            plotted_variables.push_back({requested_vars[i], plot_colors[i % plot_colors.size()]});
+        }
+
     } catch (const exception& e) {
         cerr << "SIMULATION ERROR: " << e.what() << endl;
+        circuit_out.reset(); // Invalidate circuit on error
     }
     cout << "--- Simulation Finished ---" << endl;
 }
@@ -1208,7 +1278,12 @@ void handle_dialog_ok() {
         if (!dialogFields.empty() && !dialogFields[0].buffer.empty()) load_schematic(SCHEMATICS_PATH + dialogFields[0].buffer);
     }
     else if (activeDialogType == DialogType::TRANSIENT_ANALYSIS || activeDialogType == DialogType::DC_SWEEP_ANALYSIS) {
-        run_simulation_in_terminal(activeDialogType, dialogFields);
+        run_simulation_in_terminal(activeDialogType, dialogFields, last_simulated_circuit);
+        // If simulation was successful, switch to results view
+        if (last_simulated_circuit && (last_simulated_circuit->tran_solved || last_simulated_circuit->dc_sweep_solved)) {
+            currentAppState = AppState::RESULTS_VIEW;
+            cursor_index = 0; // Reset cursor on new simulation
+        }
     }
     close_dialog();
 }
@@ -1278,6 +1353,378 @@ void render_dialog(SDL_Renderer* renderer, TTF_Font* font) {
     cancelButton.render(renderer, font);
 }
 
+// Helper to map a data point to screen coordinates
+SDL_Point map_point_to_screen(double data_x, double data_y, const SDL_Rect& graph_area, double x_min, double x_max, double y_min, double y_max) {
+    if (x_max == x_min || y_max == y_min) {
+        return { graph_area.x, graph_area.y };
+    }
+    int screen_x = graph_area.x + static_cast<int>(((data_x - x_min) / (x_max - x_min)) * graph_area.w);
+    int screen_y = graph_area.y + graph_area.h - static_cast<int>(((data_y - y_min) / (y_max - y_min)) * graph_area.h);
+    return { screen_x, screen_y };
+}
+
+// Helper to render text
+void render_text(SDL_Renderer* renderer, TTF_Font* font, const string& text, int x, int y, SDL_Color color, bool center_x = false, bool center_y = false) {
+    if (!font || text.empty()) return;
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    if (!surface) return;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        SDL_FreeSurface(surface);
+        return;
+    }
+    SDL_Rect dest_rect = { x, y, surface->w, surface->h };
+    if (center_x) dest_rect.x -= surface->w / 2;
+    if (center_y) dest_rect.y -= surface->h / 2;
+    SDL_RenderCopy(renderer, texture, nullptr, &dest_rect);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+}
+
+// Expression Parser - with error handling
+double evaluate_expression(const string& expr, const SpiceEngine::ResultPoint& data_point) {
+    string current_token;
+    vector<string> tokens;
+    vector<char> ops;
+
+    // 1. Tokenize the expression
+    for (char c : expr) {
+        if (c == '+' || c == '-') {
+            if (!current_token.empty()) {
+                tokens.push_back(trim_string_util(current_token));
+                current_token.clear();
+            }
+            ops.push_back(c);
+        } else {
+            current_token += c;
+        }
+    }
+    if (!current_token.empty()) {
+        tokens.push_back(trim_string_util(current_token));
+    }
+
+    if (tokens.empty()) return NAN; // Invalid expression
+
+    // 2. Evaluate
+    double result = 0.0;
+    // Handle first token
+    if (data_point.count(tokens[0])) {
+        result = data_point.at(tokens[0]);
+    } else {
+        return NAN; // First term must exist
+    }
+
+    // Handle subsequent tokens
+    for (size_t i = 0; i < ops.size(); ++i) {
+        if (i + 1 < tokens.size()) {
+            if (data_point.count(tokens[i+1])) {
+                double val = data_point.at(tokens[i+1]);
+                if (ops[i] == '+') {
+                    result += val;
+                } else if (ops[i] == '-') {
+                    result -= val;
+                }
+            } else {
+                return NAN; // A subsequent term was not found
+            }
+        } else {
+            return NAN; // Operator without a term
+        }
+    }
+
+    return result;
+}
+
+
+void render_trace_dialog(SDL_Renderer* renderer, TTF_Font* font); // Forward declaration
+void render_scale_dialog(SDL_Renderer* renderer, TTF_Font* font); // Forward declaration
+
+void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>& results_buttons) {
+    // Control panel on the left
+    SDL_Rect controlPanel = { 0, 0, 220, SCREEN_HEIGHT };
+    SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
+    SDL_RenderFillRect(renderer, &controlPanel);
+
+    // Graph area on the right
+    const int margin_top = 50, margin_bottom = 50, margin_left = 70, margin_right = 30;
+    SDL_Rect graphArea = { controlPanel.w + margin_left, margin_top, SCREEN_WIDTH - controlPanel.w - margin_left - margin_right, SCREEN_HEIGHT - margin_top - margin_bottom };
+    SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 0xFF);
+    SDL_RenderFillRect(renderer, &graphArea);
+
+
+    // Render title
+    render_text(renderer, font, "Simulation Results", controlPanel.w / 2, 20, { 255, 255, 255, 255 }, true);
+
+    // Render buttons
+    for (auto& button : results_buttons) {
+        button.render(renderer, font);
+    }
+
+    // --- Graph Plotting Logic ---
+    if (!last_simulated_circuit || plotted_variables.empty()) {
+        render_text(renderer, font, "No data to display", graphArea.x + graphArea.w / 2, graphArea.y + graphArea.h / 2, { 150, 150, 150, 255 }, true, true);
+        SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+        SDL_RenderDrawRect(renderer, &graphArea);
+        if(show_trace_dialog) render_trace_dialog(renderer, font);
+        if(show_scale_dialog) render_scale_dialog(renderer, font);
+        return;
+    }
+
+    // Determine analysis type and get data
+    bool is_tran = last_simulated_circuit->tran_solved;
+    const auto& results = is_tran ? last_simulated_circuit->tran_results : last_simulated_circuit->dc_sweep_results;
+    if (results.empty()) {
+        render_text(renderer, font, "Simulation produced no data points", graphArea.x + graphArea.w / 2, graphArea.y + graphArea.h / 2, { 150, 150, 150, 255 }, true, true);
+        SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+        SDL_RenderDrawRect(renderer, &graphArea);
+        if(show_trace_dialog) render_trace_dialog(renderer, font);
+        if(show_scale_dialog) render_scale_dialog(renderer, font);
+        return;
+    }
+
+    // 1. Find Min/Max for auto-scaling
+    double y_min_auto = DBL_MAX, y_max_auto = -DBL_MAX;
+    for (const auto& var : plotted_variables) {
+        for (const auto& point : results) {
+            double val = evaluate_expression(var.name, point);
+            if (!isnan(val)) {
+                if (val < y_min_auto) y_min_auto = val;
+                if (val > y_max_auto) y_max_auto = val;
+            }
+        }
+    }
+
+    if (y_min_auto > y_max_auto) { // No valid data found
+        render_text(renderer, font, "Variable not found in results", graphArea.x + graphArea.w / 2, graphArea.y + graphArea.h / 2, { 255, 100, 100, 255 }, true, true);
+        SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+        SDL_RenderDrawRect(renderer, &graphArea);
+        if(show_trace_dialog) render_trace_dialog(renderer, font);
+        if(show_scale_dialog) render_scale_dialog(renderer, font);
+        return;
+    }
+
+    // 2. Define axis ranges with padding
+    double x_min = manual_scale.x_min_str.empty() ? (is_tran ? 0.0 : last_simulated_circuit->dc_start) : parse_value_with_metric_prefix_util(manual_scale.x_min_str);
+    double x_max = manual_scale.x_max_str.empty() ? (is_tran ? last_simulated_circuit->tran_t_stop : last_simulated_circuit->dc_end) : parse_value_with_metric_prefix_util(manual_scale.x_max_str);
+
+    double y_min = y_min_auto;
+    double y_max = y_max_auto;
+
+    double y_range = y_max - y_min;
+    if (abs(y_range) < 1e-9) { // Handle flat lines
+        y_range = (abs(y_min) > 1e-9) ? abs(y_min) : 1.0;
+        y_min -= y_range * 0.5;
+        y_max += y_range * 0.5;
+    }
+    y_min -= y_range * 0.1; // 10% padding
+    y_max += y_range * 0.1;
+
+    if (!manual_scale.y_min_str.empty()) y_min = parse_value_with_metric_prefix_util(manual_scale.y_min_str);
+    if (!manual_scale.y_max_str.empty()) y_max = parse_value_with_metric_prefix_util(manual_scale.y_max_str);
+
+    y_range = y_max - y_min;
+
+    // 3. Draw Grid and Axis Labels
+    const int num_grid_lines = 10;
+    SDL_SetRenderDrawColor(renderer, 0x40, 0x40, 0x40, 0xFF);
+    // Vertical grid lines
+    for (int i = 1; i < num_grid_lines; ++i) {
+        double x_val = x_min + (x_max - x_min) * i / num_grid_lines;
+        int x_screen = graphArea.x + (graphArea.w * i / num_grid_lines);
+        SDL_RenderDrawLine(renderer, x_screen, graphArea.y, x_screen, graphArea.y + graphArea.h);
+        render_text(renderer, font, format_value_with_metric_prefix(x_val), x_screen, graphArea.y + graphArea.h + 5, {200, 200, 200, 255}, true);
+    }
+    // Horizontal grid lines
+    for (int i = 1; i < num_grid_lines; ++i) {
+        double y_val = y_min + y_range * i / num_grid_lines;
+        int y_screen = graphArea.y + graphArea.h - (graphArea.h * i / num_grid_lines);
+        SDL_RenderDrawLine(renderer, graphArea.x, y_screen, graphArea.x + graphArea.w, y_screen);
+        render_text(renderer, font, format_value_with_metric_prefix(y_val), graphArea.x - 10, y_screen, {200, 200, 200, 255}, true, true);
+    }
+
+    // Draw main axis box on top of grid
+    SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+    SDL_RenderDrawRect(renderer, &graphArea);
+
+    // Draw main axis labels
+    render_text(renderer, font, format_value_with_metric_prefix(y_max), graphArea.x - 10, graphArea.y, { 200, 200, 200, 255 }, true, true);
+    render_text(renderer, font, format_value_with_metric_prefix(y_min), graphArea.x - 10, graphArea.y + graphArea.h, { 200, 200, 200, 255 }, true, true);
+    render_text(renderer, font, format_value_with_metric_prefix(x_min), graphArea.x, graphArea.y + graphArea.h + 5, { 200, 200, 200, 255 }, true);
+    render_text(renderer, font, format_value_with_metric_prefix(x_max), graphArea.x + graphArea.w, graphArea.y + graphArea.h + 5, { 200, 200, 200, 255 }, true);
+
+
+    // 4. Draw Plots and Legend
+    string x_axis_key = is_tran ? "time" : last_simulated_circuit->dc_sweep_source_name;
+
+    int legend_y = 150;
+    for (size_t i = 0; i < plotted_variables.size(); ++i) {
+        const auto& var = plotted_variables[i];
+
+        // Draw legend item
+        SDL_Rect legend_color_box = { 10, legend_y, 15, 15 };
+        SDL_SetRenderDrawColor(renderer, var.color.r, var.color.g, var.color.b, 255);
+        SDL_RenderFillRect(renderer, &legend_color_box);
+        render_text(renderer, font, var.name, 35, legend_y, { 255, 255, 255, 255 });
+        legend_y += 25;
+
+        // Draw plot line
+        SDL_Point prev_point = { -1, -1 };
+        for (const auto& point_data : results) {
+            if (point_data.count(x_axis_key)) {
+                double x_val = point_data.at(x_axis_key);
+                double y_val = evaluate_expression(var.name, point_data);
+                if (!isnan(y_val)) {
+                    SDL_Point current_point = map_point_to_screen(x_val, y_val, graphArea, x_min, x_max, y_min, y_max);
+
+                    if (prev_point.x != -1) {
+                        thickLineRGBA(renderer, prev_point.x, prev_point.y, current_point.x, current_point.y, 2, var.color.r, var.color.g, var.color.b, 255);
+                    }
+                    prev_point = current_point;
+                } else {
+                    prev_point = {-1, -1};
+                }
+            }
+        }
+        // Draw points on top of lines
+        for (const auto& point_data : results) {
+            if (point_data.count(x_axis_key)) {
+                double x_val = point_data.at(x_axis_key);
+                double y_val = evaluate_expression(var.name, point_data);
+                if (!isnan(y_val)) {
+                    SDL_Point current_point = map_point_to_screen(x_val, y_val, graphArea, x_min, x_max, y_min, y_max);
+                    filledCircleRGBA(renderer, current_point.x, current_point.y, 3, var.color.r, var.color.g, var.color.b, 255);
+                }
+            }
+        }
+    }
+
+    // 5. Draw Cursor and Info
+    if (cursor_index >= 0 && cursor_index < results.size()) {
+        const auto& cursor_data_point = results[cursor_index];
+        double x_cursor_val = cursor_data_point.at(x_axis_key);
+        SDL_Point cursor_screen_pos = map_point_to_screen(x_cursor_val, 0, graphArea, x_min, x_max, y_min, y_max);
+
+        // Draw vertical line
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 150);
+        SDL_RenderDrawLine(renderer, cursor_screen_pos.x, graphArea.y, cursor_screen_pos.x, graphArea.y + graphArea.h);
+
+        // Display cursor data
+        int info_y = legend_y + 20;
+        render_text(renderer, font, "Cursor Data:", 110, info_y, {255, 255, 0, 255}, true);
+        info_y += 25;
+        render_text(renderer, font, (is_tran ? "Time: " : x_axis_key + ": ") + format_value_with_metric_prefix(x_cursor_val), 10, info_y, {255, 255, 255, 255});
+        info_y += 20;
+
+        for (const auto& var : plotted_variables) {
+            double y_cursor_val = evaluate_expression(var.name, cursor_data_point);
+            if (!isnan(y_cursor_val)) {
+                SDL_Point trace_cursor_pos = map_point_to_screen(x_cursor_val, y_cursor_val, graphArea, x_min, x_max, y_min, y_max);
+                filledCircleRGBA(renderer, trace_cursor_pos.x, trace_cursor_pos.y, 5, var.color.r, var.color.g, var.color.b, 255);
+
+                string info_text = var.name + ": " + format_value_with_metric_prefix(y_cursor_val);
+                render_text(renderer, font, info_text, 10, info_y, var.color);
+                info_y += 20;
+            }
+        }
+    }
+
+    if(show_trace_dialog) render_trace_dialog(renderer, font);
+    if(show_scale_dialog) render_scale_dialog(renderer, font);
+}
+
+void render_trace_dialog(SDL_Renderer* renderer, TTF_Font* font) {
+    const int dialog_w = 400;
+    const int dialog_h = 150 + plotted_variables.size() * 40;
+    SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
+
+    // Draw panel
+    SDL_SetRenderDrawColor(renderer, 0x55, 0x55, 0x55, 0xFF);
+    SDL_RenderFillRect(renderer, &panelRect);
+    SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+    SDL_RenderDrawRect(renderer, &panelRect);
+
+    // Title
+    render_text(renderer, font, "Manage Traces", panelRect.x + dialog_w / 2, panelRect.y + 20, {255, 255, 255, 255}, true);
+
+    int current_y = panelRect.y + 50;
+    for(size_t i = 0; i < plotted_variables.size(); ++i) {
+        // Color box
+        SDL_Rect color_box = {panelRect.x + 20, current_y, 30, 30};
+        SDL_SetRenderDrawColor(renderer, plotted_variables[i].color.r, plotted_variables[i].color.g, plotted_variables[i].color.b, 255);
+        SDL_RenderFillRect(renderer, &color_box);
+
+        // Variable name
+        render_text(renderer, font, plotted_variables[i].name, panelRect.x + 60, current_y + 15, {255, 255, 255, 255}, false, true);
+
+        // Delete button
+        Button delete_button("Delete", panelRect.x + dialog_w - 80, current_y, 60, 30, [i](){
+            if (i < plotted_variables.size()) {
+                plotted_variables.erase(plotted_variables.begin() + i);
+            }
+        });
+        delete_button.render(renderer, font);
+
+        current_y += 40;
+    }
+
+    // Add new trace section
+    render_text(renderer, font, "Add:", panelRect.x + 20, current_y + 15, {255, 255, 255, 255}, false, true);
+    SDL_Rect input_rect = {panelRect.x + 60, current_y, dialog_w - 150, 30};
+    SDL_SetRenderDrawColor(renderer, (active_trace_dialog_field == 0) ? 0x00 : 0x33, (active_trace_dialog_field == 0) ? 0x00 : 0x33, (active_trace_dialog_field == 0) ? 0x44 : 0x33, 0xFF);
+    SDL_RenderFillRect(renderer, &input_rect);
+    render_text(renderer, font, new_trace_buffer, input_rect.x + 5, input_rect.y + 15, {255, 255, 255, 255}, false, true);
+
+    Button add_button("Add", input_rect.x + input_rect.w + 10, current_y, 60, 30, [](){
+        if(!new_trace_buffer.empty()) {
+            plotted_variables.push_back({new_trace_buffer, plot_colors[plotted_variables.size() % plot_colors.size()]});
+            new_trace_buffer = "";
+        }
+    });
+    add_button.render(renderer, font);
+
+    // Close button
+    Button close_button("Close", panelRect.x + dialog_w/2 - 40, panelRect.y + dialog_h - 45, 80, 30, [](){ show_trace_dialog = false; SDL_StopTextInput(); });
+    close_button.render(renderer, font);
+}
+
+void render_scale_dialog(SDL_Renderer* renderer, TTF_Font* font) {
+    const int dialog_w = 350;
+    const int dialog_h = 280;
+    SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
+
+    // Draw panel
+    SDL_SetRenderDrawColor(renderer, 0x55, 0x55, 0x55, 0xFF);
+    SDL_RenderFillRect(renderer, &panelRect);
+    SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
+    SDL_RenderDrawRect(renderer, &panelRect);
+
+    // Title
+    render_text(renderer, font, "Adjust Scale", panelRect.x + dialog_w / 2, panelRect.y + 20, {255, 255, 255, 255}, true);
+
+    vector<tuple<string, string*, int>> fields = {
+            make_tuple("X-Min:", &manual_scale.x_min_str, 0),
+            make_tuple("X-Max:", &manual_scale.x_max_str, 1),
+            make_tuple("Y-Min:", &manual_scale.y_min_str, 2),
+            make_tuple("Y-Max:", &manual_scale.y_max_str, 3)
+    };
+
+    int current_y = panelRect.y + 50;
+    for (const auto& field : fields) {
+        render_text(renderer, font, get<0>(field), panelRect.x + 20, current_y + 15, {255, 255, 255, 255}, false, true);
+        SDL_Rect input_rect = {panelRect.x + 80, current_y, dialog_w - 100, 30};
+        SDL_SetRenderDrawColor(renderer, (active_trace_dialog_field == get<2>(field)) ? 0x00 : 0x33, (active_trace_dialog_field == get<2>(field)) ? 0x00 : 0x33, (active_trace_dialog_field == get<2>(field)) ? 0x44 : 0x33, 0xFF);
+        SDL_RenderFillRect(renderer, &input_rect);
+        render_text(renderer, font, *get<1>(field), input_rect.x + 5, input_rect.y + 15, {255, 255, 255, 255}, false, true);
+        current_y += 40;
+    }
+
+    // Close button
+    Button close_button("Apply", panelRect.x + dialog_w/2 - 40, panelRect.y + dialog_h - 45, 80, 30, [](){ show_scale_dialog = false; SDL_StopTextInput(); });
+    close_button.render(renderer, font);
+}
+
+
+
 // --- Main Function ---
 int main(int argc, char* args[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() == -1) {
@@ -1297,7 +1744,7 @@ int main(int argc, char* args[]) {
         return -1;
     }
 
-    // ... (The rest of the main function remains largely the same, setting up buttons and the main loop)
+    // --- Button Setup ---
     vector<Button> topBarButtons;
     topBarButtons.emplace_back("File", 10, 5, 80, 30, []() { isFileMenuOpen = !isFileMenuOpen; isComponentsMenuOpen = false; isSimulateMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
     topBarButtons.emplace_back("Simulate", 100, 5, 100, 30, []() { isSimulateMenuOpen = !isSimulateMenuOpen; isFileMenuOpen = false; isComponentsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
@@ -1319,6 +1766,11 @@ int main(int argc, char* args[]) {
     simulateMenuButtons.emplace_back("DC Sweep Analysis", 100, 40, 180, 30, []() { setup_dialog(DialogType::DC_SWEEP_ANALYSIS, "DC Sweep Analysis", { "Source Name", "Start Value", "End Value", "Increment", "Wanted Values" }); isSimulateMenuOpen = false; });
     simulateMenuButtons.emplace_back("Transient Analysis", 100, 70, 180, 30, []() { setup_dialog(DialogType::TRANSIENT_ANALYSIS, "Transient Analysis", { "Tstep", "Tstop", "Wanted Values" }); isSimulateMenuOpen = false; });
 
+    vector<Button> resultsViewButtons;
+    resultsViewButtons.emplace_back("Back to Editor", 10, SCREEN_HEIGHT - 50, 200, 40, []() { currentAppState = AppState::SCHEMATIC_EDITOR; });
+    resultsViewButtons.emplace_back("Add/Manage Traces", 10, 70, 200, 30, []() { show_trace_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
+    resultsViewButtons.emplace_back("Adjust Scale", 10, 110, 200, 30, []() { show_scale_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
+
     vector<ComponentMenuItem> componentMenuItems;
     const int COMP_ITEM_W = 150, COMP_ITEM_H = 100, COMP_ITEM_PAD = 10;
     auto selectComp = [](ComponentType t) { selectedComponentType = t; currentInteractionMode = InteractionMode::PLACE_COMPONENT; isComponentsMenuOpen = false; placementRotation = 0; };
@@ -1332,151 +1784,295 @@ int main(int argc, char* args[]) {
 
     SDL_Event e;
     while (!quit_flag) {
-        // Main event loop
+        // --- Event Loop ---
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) quit_flag = true;
-            // ... (rest of the event handling logic)
-            if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) {
-                if (e.type == SDL_KEYDOWN) {
-                    if (e.key.keysym.sym == SDLK_RETURN) handle_dialog_ok();
-                    else if (e.key.keysym.sym == SDLK_ESCAPE) close_dialog();
-                    else if (e.key.keysym.sym == SDLK_TAB && activeDialogFieldIndex != -1) activeDialogFieldIndex = (activeDialogFieldIndex + 1) % dialogFields.size();
-                    else if (e.key.keysym.sym == SDLK_BACKSPACE && activeDialogFieldIndex != -1 && !dialogFields[activeDialogFieldIndex].buffer.empty()) dialogFields[activeDialogFieldIndex].buffer.pop_back();
-                } else if (e.type == SDL_TEXTINPUT && activeDialogFieldIndex != -1) dialogFields[activeDialogFieldIndex].buffer += e.text.text;
-                else if (e.type == SDL_MOUSEBUTTONDOWN) {
-                    int mx, my; SDL_GetMouseState(&mx, &my);
-                    for (size_t i = 0; i < dialogFields.size(); ++i) if (SDL_PointInRect(new const SDL_Point{ mx, my }, &dialogFields[i].input_rect)) { activeDialogFieldIndex = i; break; }
-                    const int dialog_w = 450, dialog_h = 100 + dialogFields.size() * 40 + 50;
-                    SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
-                    SDL_Rect okRect = { panelRect.x + panelRect.w - 190, panelRect.y + panelRect.h - 45, 80, 30 };
-                    SDL_Rect cancelRect = { panelRect.x + panelRect.w - 100, panelRect.y + panelRect.h - 45, 80, 30 };
-                    if (SDL_PointInRect(new const SDL_Point{ mx, my }, &okRect)) handle_dialog_ok();
-                    else if (SDL_PointInRect(new const SDL_Point{ mx, my }, &cancelRect)) close_dialog();
+
+            if (currentAppState == AppState::SCHEMATIC_EDITOR) {
+                // --- Schematic Editor Event Handling ---
+                if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) {
+                    if (e.type == SDL_KEYDOWN) {
+                        if (e.key.keysym.sym == SDLK_RETURN) handle_dialog_ok();
+                        else if (e.key.keysym.sym == SDLK_ESCAPE) close_dialog();
+                        else if (e.key.keysym.sym == SDLK_TAB && activeDialogFieldIndex != -1) activeDialogFieldIndex = (activeDialogFieldIndex + 1) % dialogFields.size();
+                        else if (e.key.keysym.sym == SDLK_BACKSPACE && activeDialogFieldIndex != -1 && !dialogFields[activeDialogFieldIndex].buffer.empty()) dialogFields[activeDialogFieldIndex].buffer.pop_back();
+                    } else if (e.type == SDL_TEXTINPUT && activeDialogFieldIndex != -1) dialogFields[activeDialogFieldIndex].buffer += e.text.text;
+                    else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                        int mx, my; SDL_GetMouseState(&mx, &my);
+                        for (size_t i = 0; i < dialogFields.size(); ++i) if (SDL_PointInRect(new const SDL_Point{ mx, my }, &dialogFields[i].input_rect)) { activeDialogFieldIndex = i; break; }
+                        const int dialog_w = 450, dialog_h = 100 + dialogFields.size() * 40 + 50;
+                        SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
+                        SDL_Rect okRect = { panelRect.x + panelRect.w - 190, panelRect.y + panelRect.h - 45, 80, 30 };
+                        SDL_Rect cancelRect = { panelRect.x + panelRect.w - 100, panelRect.y + panelRect.h - 45, 80, 30 };
+                        if (SDL_PointInRect(new const SDL_Point{ mx, my }, &okRect)) handle_dialog_ok();
+                        else if (SDL_PointInRect(new const SDL_Point{ mx, my }, &cancelRect)) close_dialog();
+                    }
+                    continue;
                 }
-                continue;
-            }
-            if (currentInteractionMode == InteractionMode::EDITING_COMPONENT_VALUE || currentInteractionMode == InteractionMode::EDITING_LABEL_TEXT) {
+                if (currentInteractionMode == InteractionMode::EDITING_COMPONENT_VALUE || currentInteractionMode == InteractionMode::EDITING_LABEL_TEXT) {
+                    if (e.type == SDL_KEYDOWN) {
+                        if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_ESCAPE) {
+                            if (e.key.keysym.sym == SDLK_RETURN) {
+                                if (editingComponent) editingComponent->value = textInputBuffer;
+                                if (editingLabel) editingLabel->text = textInputBuffer;
+                            }
+                            else if (editingLabel && editingLabel->text.empty()) labels.pop_back();
+                            editingComponent = nullptr; editingLabel = nullptr;
+                            currentInteractionMode = InteractionMode::NONE;
+                            SDL_StopTextInput();
+                        }
+                        else if (e.key.keysym.sym == SDLK_BACKSPACE && !textInputBuffer.empty()) textInputBuffer.pop_back();
+                        else if (e.key.keysym.sym == SDLK_r && (e.key.keysym.mod & KMOD_CTRL) && editingLabel) editingLabel->rotation_angle = (editingLabel->rotation_angle + 90) % 360;
+                    }
+                    else if (e.type == SDL_TEXTINPUT) textInputBuffer += e.text.text;
+                    continue;
+                }
                 if (e.type == SDL_KEYDOWN) {
-                    if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_ESCAPE) {
+                    if (e.key.keysym.sym == SDLK_ESCAPE) { currentInteractionMode = InteractionMode::NONE; isDrawingWire = false; }
+                    else if (e.key.keysym.sym == SDLK_r && currentInteractionMode == InteractionMode::PLACE_COMPONENT) placementRotation = (placementRotation + 90) % 360;
+                }
+                if (e.type == SDL_MOUSEBUTTONDOWN) {
+                    int mouseX, mouseY; SDL_GetMouseState(&mouseX, &mouseY);
+                    SDL_Point snappedPoint = snap_to_grid(mouseX, mouseY);
+                    if (e.button.button == SDL_BUTTON_LEFT) {
+                        bool itemClicked = false;
+                        for (auto& comp : components) if (SDL_PointInRect(&snappedPoint, &comp.value_rect)) { editingComponent = &comp; textInputBuffer = comp.value; currentInteractionMode = InteractionMode::EDITING_COMPONENT_VALUE; SDL_StartTextInput(); itemClicked = true; break; }
+                        if (itemClicked) continue;
+                        if (currentInteractionMode == InteractionMode::PLACE_LABEL) { labels.push_back({ "", snappedPoint }); editingLabel = &labels.back(); textInputBuffer = ""; currentInteractionMode = InteractionMode::EDITING_LABEL_TEXT; SDL_StartTextInput(); }
+                        else if (currentInteractionMode == InteractionMode::PLACE_GND_LABEL) { labels.push_back({ "GND", snappedPoint, {}, 0 }); schematicModified = true; currentInteractionMode = InteractionMode::NONE; }
+                        else if (currentInteractionMode == InteractionMode::WIRING) { firstInteractionPoint = snappedPoint; isDrawingWire = true; }
+                        else if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
+                            Component newComp = { selectedComponentType, {}, {}, generate_component_name(selectedComponentType), "", placementRotation };
+                            get_component_defaults(newComp.type, newComp.value);
+                            int half_len = COMPONENT_DEFAULT_LENGTH / 2;
+                            if (placementRotation == 0) { newComp.node1 = { snappedPoint.x - half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x + half_len, snappedPoint.y }; }
+                            else if (placementRotation == 90) { newComp.node1 = { snappedPoint.x, snappedPoint.y - half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y + half_len }; }
+                            else if (placementRotation == 180) { newComp.node1 = { snappedPoint.x + half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x - half_len, snappedPoint.y }; }
+                            else { newComp.node1 = { snappedPoint.x, snappedPoint.y + half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y - half_len }; }
+                            components.push_back(newComp);
+                            schematicModified = true;
+
+                            // Immediately start editing the value of the new component.
+                            editingComponent = &components.back();
+                            textInputBuffer = editingComponent->value;
+                            currentInteractionMode = InteractionMode::EDITING_COMPONENT_VALUE;
+                            SDL_StartTextInput();
+                        }
+                        else if (currentInteractionMode == InteractionMode::DELETE_ITEM) {
+                            const double DELETE_THRESHOLD_SQ = 10 * 10;
+                            SDL_Point clickPoint = { mouseX, mouseY };
+                            int wire_to_delete = -1, component_to_delete = -1, label_to_delete = -1;
+                            double min_dist_sq = DELETE_THRESHOLD_SQ;
+                            for (int i = 0; i < labels.size(); ++i) if (SDL_PointInRect(&clickPoint, &labels[i].text_rect)) { label_to_delete = i; break; }
+                            if (label_to_delete == -1) {
+                                for (int i = 0; i < wires.size(); ++i) { double d = dist_to_segment_sq(clickPoint, wires[i].start, wires[i].end); if (d < min_dist_sq) { min_dist_sq = d; wire_to_delete = i; component_to_delete = -1; } }
+                                for (int i = 0; i < components.size(); ++i) { double d = dist_to_segment_sq(clickPoint, components[i].node1, components[i].node2); if (d < min_dist_sq) { min_dist_sq = d; component_to_delete = i; wire_to_delete = -1; } }
+                            }
+                            if (label_to_delete != -1) { labels.erase(labels.begin() + label_to_delete); schematicModified = true; }
+                            else if (wire_to_delete != -1) { wires.erase(wires.begin() + wire_to_delete); schematicModified = true; }
+                            else if (component_to_delete != -1) { components.erase(components.begin() + component_to_delete); schematicModified = true; }
+                        }
+                    }
+                    else if (e.button.button == SDL_BUTTON_RIGHT) { currentInteractionMode = InteractionMode::NONE; isDrawingWire = false; }
+                }
+                else if (e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT && currentInteractionMode == InteractionMode::WIRING && isDrawingWire) {
+                    int mouseX, mouseY; SDL_GetMouseState(&mouseX, &mouseY);
+                    SDL_Point snappedPoint = snap_to_grid(mouseX, mouseY);
+                    if (snappedPoint.x != firstInteractionPoint.x || snappedPoint.y != firstInteractionPoint.y) { wires.push_back({ firstInteractionPoint, snappedPoint }); schematicModified = true; }
+                    isDrawingWire = false;
+                }
+                if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.handle_event(&e);
+                if (isComponentsMenuOpen) for (auto& i : componentMenuItems) i.button.handle_event(&e);
+                if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.handle_event(&e);
+                for (auto& b : topBarButtons) b.handle_event(&e);
+
+            } else if (currentAppState == AppState::RESULTS_VIEW) {
+                // --- Results View Event Handling ---
+                if (e.type == SDL_KEYDOWN && !show_trace_dialog && !show_scale_dialog) {
+                    if (e.key.keysym.sym == SDLK_RIGHT) {
+                        if (last_simulated_circuit && !last_simulated_circuit->tran_results.empty() && cursor_index < last_simulated_circuit->tran_results.size() - 1) {
+                            cursor_index++;
+                        }
+                        if (last_simulated_circuit && !last_simulated_circuit->dc_sweep_results.empty() && cursor_index < last_simulated_circuit->dc_sweep_results.size() - 1) {
+                            cursor_index++;
+                        }
+                    } else if (e.key.keysym.sym == SDLK_LEFT) {
+                        if (cursor_index > 0) {
+                            cursor_index--;
+                        }
+                    }
+                }
+                else if(show_trace_dialog) {
+                    if (e.type == SDL_KEYDOWN) {
                         if (e.key.keysym.sym == SDLK_RETURN) {
-                            if (editingComponent) editingComponent->value = textInputBuffer;
-                            if (editingLabel) editingLabel->text = textInputBuffer;
+                            if(!new_trace_buffer.empty()) {
+                                plotted_variables.push_back({new_trace_buffer, plot_colors[plotted_variables.size() % plot_colors.size()]});
+                                new_trace_buffer = "";
+                            }
+                        } else if (e.key.keysym.sym == SDLK_ESCAPE) {
+                            show_trace_dialog = false;
+                            SDL_StopTextInput();
+                        } else if (e.key.keysym.sym == SDLK_BACKSPACE && !new_trace_buffer.empty()) {
+                            new_trace_buffer.pop_back();
                         }
-                        else if (editingLabel && editingLabel->text.empty()) labels.pop_back();
-                        editingComponent = nullptr; editingLabel = nullptr;
-                        currentInteractionMode = InteractionMode::NONE;
-                        SDL_StopTextInput();
-                    }
-                    else if (e.key.keysym.sym == SDLK_BACKSPACE && !textInputBuffer.empty()) textInputBuffer.pop_back();
-                    else if (e.key.keysym.sym == SDLK_r && (e.key.keysym.mod & KMOD_CTRL) && editingLabel) editingLabel->rotation_angle = (editingLabel->rotation_angle + 90) % 360;
-                }
-                else if (e.type == SDL_TEXTINPUT) textInputBuffer += e.text.text;
-                continue;
-            }
-            if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_ESCAPE) { currentInteractionMode = InteractionMode::NONE; isDrawingWire = false; }
-                else if (e.key.keysym.sym == SDLK_r && currentInteractionMode == InteractionMode::PLACE_COMPONENT) placementRotation = (placementRotation + 90) % 360;
-            }
-            if (e.type == SDL_MOUSEBUTTONDOWN) {
-                int mouseX, mouseY; SDL_GetMouseState(&mouseX, &mouseY);
-                SDL_Point snappedPoint = snap_to_grid(mouseX, mouseY);
-                if (e.button.button == SDL_BUTTON_LEFT) {
-                    bool itemClicked = false;
-                    for (auto& comp : components) if (SDL_PointInRect(&snappedPoint, &comp.value_rect)) { editingComponent = &comp; textInputBuffer = comp.value; currentInteractionMode = InteractionMode::EDITING_COMPONENT_VALUE; SDL_StartTextInput(); itemClicked = true; break; }
-                    if (itemClicked) continue;
-                    if (currentInteractionMode == InteractionMode::PLACE_LABEL) { labels.push_back({ "", snappedPoint }); editingLabel = &labels.back(); textInputBuffer = ""; currentInteractionMode = InteractionMode::EDITING_LABEL_TEXT; SDL_StartTextInput(); }
-                    else if (currentInteractionMode == InteractionMode::PLACE_GND_LABEL) { labels.push_back({ "GND", snappedPoint, {}, 0 }); schematicModified = true; currentInteractionMode = InteractionMode::NONE; }
-                    else if (currentInteractionMode == InteractionMode::WIRING) { firstInteractionPoint = snappedPoint; isDrawingWire = true; }
-                    else if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
-                        Component newComp = { selectedComponentType, {}, {}, generate_component_name(selectedComponentType), "", placementRotation };
-                        get_component_defaults(newComp.type, newComp.value);
-                        int half_len = COMPONENT_DEFAULT_LENGTH / 2;
-                        if (placementRotation == 0) { newComp.node1 = { snappedPoint.x - half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x + half_len, snappedPoint.y }; }
-                        else if (placementRotation == 90) { newComp.node1 = { snappedPoint.x, snappedPoint.y - half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y + half_len }; }
-                        else if (placementRotation == 180) { newComp.node1 = { snappedPoint.x + half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x - half_len, snappedPoint.y }; }
-                        else { newComp.node1 = { snappedPoint.x, snappedPoint.y + half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y - half_len }; }
-                        components.push_back(newComp); schematicModified = true;
-                    }
-                    else if (currentInteractionMode == InteractionMode::DELETE_ITEM) {
-                        const double DELETE_THRESHOLD_SQ = 10 * 10;
-                        SDL_Point clickPoint = { mouseX, mouseY };
-                        int wire_to_delete = -1, component_to_delete = -1, label_to_delete = -1;
-                        double min_dist_sq = DELETE_THRESHOLD_SQ;
-                        for (int i = 0; i < labels.size(); ++i) if (SDL_PointInRect(&clickPoint, &labels[i].text_rect)) { label_to_delete = i; break; }
-                        if (label_to_delete == -1) {
-                            for (int i = 0; i < wires.size(); ++i) { double d = dist_to_segment_sq(clickPoint, wires[i].start, wires[i].end); if (d < min_dist_sq) { min_dist_sq = d; wire_to_delete = i; component_to_delete = -1; } }
-                            for (int i = 0; i < components.size(); ++i) { double d = dist_to_segment_sq(clickPoint, components[i].node1, components[i].node2); if (d < min_dist_sq) { min_dist_sq = d; component_to_delete = i; wire_to_delete = -1; } }
+                    } else if (e.type == SDL_TEXTINPUT) {
+                        new_trace_buffer += e.text.text;
+                    } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                        int mx, my; SDL_GetMouseState(&mx, &my);
+                        const int dialog_w = 400;
+                        const int dialog_h = 150 + plotted_variables.size() * 40;
+                        SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
+
+                        int current_y = panelRect.y + 50;
+                        for(size_t i = 0; i < plotted_variables.size(); ++i) {
+                            SDL_Rect color_box = {panelRect.x + 20, current_y, 30, 30};
+                            if (SDL_PointInRect(new const SDL_Point{mx, my}, &color_box)) {
+                                int current_color_index = -1;
+                                for(size_t c = 0; c < plot_colors.size(); ++c) {
+                                    if(plotted_variables[i].color.r == plot_colors[c].r && plotted_variables[i].color.g == plot_colors[c].g && plotted_variables[i].color.b == plot_colors[c].b) {
+                                        current_color_index = c;
+                                        break;
+                                    }
+                                }
+                                plotted_variables[i].color = plot_colors[(current_color_index + 1) % plot_colors.size()];
+                            }
+
+                            SDL_Rect delete_rect = {panelRect.x + dialog_w - 80, current_y, 60, 30};
+                            if (SDL_PointInRect(new const SDL_Point{mx, my}, &delete_rect)) {
+                                plotted_variables.erase(plotted_variables.begin() + i);
+                                break;
+                            }
+                            current_y += 40;
                         }
-                        if (label_to_delete != -1) { labels.erase(labels.begin() + label_to_delete); schematicModified = true; }
-                        else if (wire_to_delete != -1) { wires.erase(wires.begin() + wire_to_delete); schematicModified = true; }
-                        else if (component_to_delete != -1) { components.erase(components.begin() + component_to_delete); schematicModified = true; }
+
+                        SDL_Rect input_rect = {panelRect.x + 60, current_y, dialog_w - 150, 30};
+                        if(SDL_PointInRect(new const SDL_Point{mx, my}, &input_rect)) {
+                            active_trace_dialog_field = 0;
+                        } else {
+                            active_trace_dialog_field = -1;
+                        }
+
+                        SDL_Rect add_rect = {input_rect.x + input_rect.w + 10, current_y, 60, 30};
+                        if (SDL_PointInRect(new const SDL_Point{mx, my}, &add_rect)) {
+                            if(!new_trace_buffer.empty()) {
+                                plotted_variables.push_back({new_trace_buffer, plot_colors[plotted_variables.size() % plot_colors.size()]});
+                                new_trace_buffer = "";
+                            }
+                        }
+
+                        SDL_Rect close_rect = {panelRect.x + dialog_w/2 - 40, panelRect.y + dialog_h - 45, 80, 30};
+                        if (SDL_PointInRect(new const SDL_Point{mx, my}, &close_rect)) {
+                            show_trace_dialog = false;
+                            SDL_StopTextInput();
+                        }
+                    }
+                } else if (show_scale_dialog) {
+                    vector<tuple<string, string*, int>> fields = {
+                            make_tuple("X-Min:", &manual_scale.x_min_str, 0),
+                            make_tuple("X-Max:", &manual_scale.x_max_str, 1),
+                            make_tuple("Y-Min:", &manual_scale.y_min_str, 2),
+                            make_tuple("Y-Max:", &manual_scale.y_max_str, 3)
+                    };
+                    if (e.type == SDL_KEYDOWN) {
+                        if (e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_ESCAPE) {
+                            show_scale_dialog = false;
+                            SDL_StopTextInput();
+                        } else if (e.key.keysym.sym == SDLK_TAB) {
+                            active_trace_dialog_field = (active_trace_dialog_field + 1) % fields.size();
+                        } else if (e.key.keysym.sym == SDLK_BACKSPACE && active_trace_dialog_field != -1) {
+                            string* buffer = get<1>(fields[active_trace_dialog_field]);
+                            if (!buffer->empty()) buffer->pop_back();
+                        }
+                    } else if (e.type == SDL_TEXTINPUT && active_trace_dialog_field != -1) {
+                        *get<1>(fields[active_trace_dialog_field]) += e.text.text;
+                    } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                        int mx, my; SDL_GetMouseState(&mx, &my);
+                        const int dialog_w = 350;
+                        const int dialog_h = 280;
+                        SDL_Rect panelRect = { SCREEN_WIDTH / 2 - dialog_w / 2, SCREEN_HEIGHT / 2 - dialog_h / 2, dialog_w, dialog_h };
+                        int current_y = panelRect.y + 50;
+                        active_trace_dialog_field = -1;
+                        for(const auto& field : fields) {
+                            SDL_Rect input_rect = {panelRect.x + 80, current_y, dialog_w - 100, 30};
+                            if(SDL_PointInRect(new const SDL_Point{mx, my}, &input_rect)) {
+                                active_trace_dialog_field = get<2>(field);
+                            }
+                            current_y += 40;
+                        }
+                        SDL_Rect close_rect = {panelRect.x + dialog_w/2 - 40, panelRect.y + dialog_h - 45, 80, 30};
+                        if (SDL_PointInRect(new const SDL_Point{mx, my}, &close_rect)) {
+                            show_scale_dialog = false;
+                            SDL_StopTextInput();
+                        }
+                    }
+                } else {
+                    for (auto& b : resultsViewButtons) {
+                        b.handle_event(&e);
                     }
                 }
-                else if (e.button.button == SDL_BUTTON_RIGHT) { currentInteractionMode = InteractionMode::NONE; isDrawingWire = false; }
             }
-            else if (e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT && currentInteractionMode == InteractionMode::WIRING && isDrawingWire) {
-                int mouseX, mouseY; SDL_GetMouseState(&mouseX, &mouseY);
-                SDL_Point snappedPoint = snap_to_grid(mouseX, mouseY);
-                if (snappedPoint.x != firstInteractionPoint.x || snappedPoint.y != firstInteractionPoint.y) { wires.push_back({ firstInteractionPoint, snappedPoint }); schematicModified = true; }
-                isDrawingWire = false;
-            }
-            if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.handle_event(&e);
-            if (isComponentsMenuOpen) for (auto& i : componentMenuItems) i.button.handle_event(&e);
-            if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.handle_event(&e);
-            for (auto& b : topBarButtons) b.handle_event(&e);
         }
 
         // --- Rendering ---
         SDL_SetRenderDrawColor(renderer, 0x22, 0x22, 0x22, 0xFF);
         SDL_RenderClear(renderer);
-        draw_grid(renderer);
-        draw_schematic_elements(renderer, valueFont, componentMenuItems);
 
-        if (currentInteractionMode == InteractionMode::WIRING && isDrawingWire) {
-            int mx, my; SDL_GetMouseState(&mx, &my);
-            thickLineRGBA(renderer, firstInteractionPoint.x, firstInteractionPoint.y, snap_to_grid(mx, my).x, snap_to_grid(mx, my).y, 3, 0xFF, 0xFF, 0xFF, 0xFF);
-        }
-        if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
-            int mx, my; SDL_GetMouseState(&mx, &my);
-            SDL_Point center = snap_to_grid(mx, my);
-            SDL_Texture* icon = nullptr;
-            for (const auto& item : componentMenuItems) if (item.type == selectedComponentType) icon = item.iconTexture;
-            if (icon) {
-                SDL_SetTextureAlphaMod(icon, 150);
-                SDL_Rect dest = { center.x - COMPONENT_DEFAULT_LENGTH / 2, center.y - COMPONENT_DEFAULT_LENGTH / 2, COMPONENT_DEFAULT_LENGTH, COMPONENT_DEFAULT_LENGTH };
-                SDL_RenderCopyEx(renderer, icon, nullptr, &dest, placementRotation, nullptr, SDL_FLIP_NONE);
-                SDL_SetTextureAlphaMod(icon, 255);
+        if (currentAppState == AppState::SCHEMATIC_EDITOR) {
+            // --- Schematic Editor Rendering ---
+            draw_grid(renderer);
+            draw_schematic_elements(renderer, valueFont, componentMenuItems);
+
+            if (currentInteractionMode == InteractionMode::WIRING && isDrawingWire) {
+                int mx, my; SDL_GetMouseState(&mx, &my);
+                thickLineRGBA(renderer, firstInteractionPoint.x, firstInteractionPoint.y, snap_to_grid(mx, my).x, snap_to_grid(mx, my).y, 3, 0xFF, 0xFF, 0xFF, 0xFF);
             }
-        }
-
-        SDL_Rect topBarRect = { 0, 0, SCREEN_WIDTH, TOP_BAR_HEIGHT };
-        SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
-        SDL_RenderFillRect(renderer, &topBarRect);
-        for (auto& b : topBarButtons) b.render(renderer, uiFont);
-
-        if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.render(renderer, uiFont);
-        if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.render(renderer, uiFont);
-        if (isComponentsMenuOpen) {
-            SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 2 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
-            SDL_SetRenderDrawColor(renderer, 0x3A, 0x3A, 0x3A, 0xFF);
-            SDL_RenderFillRect(renderer, &menuPanel);
-            for (auto& item : componentMenuItems) {
-                item.button.render(renderer, uiFont);
-                if (item.iconTexture) {
-                    SDL_Rect iconRect = { item.button.m_position.x + 45, item.button.m_position.y + 10, 60, 60 };
-                    SDL_RenderCopy(renderer, item.iconTexture, nullptr, &iconRect);
-                }
-                SDL_Surface* textSurface = TTF_RenderText_Solid(uiFont, item.name.c_str(), { 0xFF, 0xFF, 0xFF, 0xFF });
-                if (textSurface) {
-                    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-                    SDL_Rect textRect = { item.button.m_position.x + (item.button.m_position.w - textSurface->w) / 2, item.button.m_position.y + 75, textSurface->w, textSurface->h };
-                    SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
-                    SDL_FreeSurface(textSurface);
-                    SDL_DestroyTexture(textTexture);
+            if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
+                int mx, my; SDL_GetMouseState(&mx, &my);
+                SDL_Point center = snap_to_grid(mx, my);
+                SDL_Texture* icon = nullptr;
+                for (const auto& item : componentMenuItems) if (item.type == selectedComponentType) icon = item.iconTexture;
+                if (icon) {
+                    SDL_SetTextureAlphaMod(icon, 150);
+                    SDL_Rect dest = { center.x - COMPONENT_DEFAULT_LENGTH / 2, center.y - COMPONENT_DEFAULT_LENGTH / 2, COMPONENT_DEFAULT_LENGTH, COMPONENT_DEFAULT_LENGTH };
+                    SDL_RenderCopyEx(renderer, icon, nullptr, &dest, placementRotation, nullptr, SDL_FLIP_NONE);
+                    SDL_SetTextureAlphaMod(icon, 255);
                 }
             }
+
+            SDL_Rect topBarRect = { 0, 0, SCREEN_WIDTH, TOP_BAR_HEIGHT };
+            SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
+            SDL_RenderFillRect(renderer, &topBarRect);
+            for (auto& b : topBarButtons) b.render(renderer, uiFont);
+
+            if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.render(renderer, uiFont);
+            if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.render(renderer, uiFont);
+            if (isComponentsMenuOpen) {
+                SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 2 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
+                SDL_SetRenderDrawColor(renderer, 0x3A, 0x3A, 0x3A, 0xFF);
+                SDL_RenderFillRect(renderer, &menuPanel);
+                for (auto& item : componentMenuItems) {
+                    item.button.render(renderer, uiFont);
+                    if (item.iconTexture) {
+                        SDL_Rect iconRect = { item.button.m_position.x + 45, item.button.m_position.y + 10, 60, 60 };
+                        SDL_RenderCopy(renderer, item.iconTexture, nullptr, &iconRect);
+                    }
+                    SDL_Surface* textSurface = TTF_RenderText_Solid(uiFont, item.name.c_str(), { 0xFF, 0xFF, 0xFF, 0xFF });
+                    if (textSurface) {
+                        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                        SDL_Rect textRect = { item.button.m_position.x + (item.button.m_position.w - textSurface->w) / 2, item.button.m_position.y + 75, textSurface->w, textSurface->h };
+                        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+                        SDL_FreeSurface(textSurface);
+                        SDL_DestroyTexture(textTexture);
+                    }
+                }
+            }
+            if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) render_dialog(renderer, uiFont);
+
+        } else if (currentAppState == AppState::RESULTS_VIEW) {
+            // --- Results View Rendering ---
+            render_results_view(renderer, uiFont, resultsViewButtons);
         }
-        if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) render_dialog(renderer, uiFont);
+
         SDL_RenderPresent(renderer);
     }
 
