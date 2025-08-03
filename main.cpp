@@ -737,7 +737,8 @@ bool isComponentsMenuOpen = false;
 bool isSimulateMenuOpen = false;
 enum class InteractionMode {
     NONE, WIRING, PLACE_COMPONENT, DRAGGING_COMPONENT, DELETE_ITEM,
-    EDITING_COMPONENT_VALUE, PLACE_LABEL, EDITING_LABEL_TEXT, PLACE_GND_LABEL, DIALOG_ACTIVE
+    EDITING_COMPONENT_VALUE, PLACE_LABEL, EDITING_LABEL_TEXT, PLACE_GND_LABEL, DIALOG_ACTIVE,
+    PROBE_CURRENT
 };
 InteractionMode currentInteractionMode = InteractionMode::NONE;
 bool isDrawingWire = false;
@@ -1439,7 +1440,7 @@ double evaluate_expression(const string& expr, const SpiceEngine::ResultPoint& d
 void render_trace_dialog(SDL_Renderer* renderer, TTF_Font* font); // Forward declaration
 void render_scale_dialog(SDL_Renderer* renderer, TTF_Font* font); // Forward declaration
 
-void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>& results_buttons) {
+void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>& results_buttons, const vector<ComponentMenuItem>& componentMenuIcons) {
     // Control panel on the left
     SDL_Rect controlPanel = { 0, 0, 220, SCREEN_HEIGHT };
     SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
@@ -1585,17 +1586,6 @@ void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>&
                 }
             }
         }
-        // Draw points on top of lines
-        for (const auto& point_data : results) {
-            if (point_data.count(x_axis_key)) {
-                double x_val = point_data.at(x_axis_key);
-                double y_val = evaluate_expression(var.name, point_data);
-                if (!isnan(y_val)) {
-                    SDL_Point current_point = map_point_to_screen(x_val, y_val, graphArea, x_min, x_max, y_min, y_max);
-                    filledCircleRGBA(renderer, current_point.x, current_point.y, 3, var.color.r, var.color.g, var.color.b, 255);
-                }
-            }
-        }
     }
 
     // 5. Draw Cursor and Info
@@ -1626,6 +1616,25 @@ void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>&
                 info_y += 20;
             }
         }
+    }
+
+    if (currentInteractionMode == InteractionMode::PROBE_CURRENT) {
+        // Dim the background
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
+        SDL_RenderFillRect(renderer, nullptr);
+
+        // Draw the schematic
+        draw_schematic_elements(renderer, font, componentMenuIcons);
+
+        // Draw instructions
+        render_text(renderer, font, "Click on a component to probe its current. Press ESC to cancel.", SCREEN_WIDTH / 2, 20, {255, 255, 0, 255}, true);
+
+        // Draw probe cursor
+        int mx, my;
+        SDL_GetMouseState(&mx, &my);
+        circleRGBA(renderer, mx, my, 15, 255, 0, 0, 255);
+        lineRGBA(renderer, mx - 20, my, mx + 20, my, 255, 0, 0, 255);
+        lineRGBA(renderer, mx, my - 20, mx, my + 20, 255, 0, 0, 255);
     }
 
     if(show_trace_dialog) render_trace_dialog(renderer, font);
@@ -1768,8 +1777,9 @@ int main(int argc, char* args[]) {
 
     vector<Button> resultsViewButtons;
     resultsViewButtons.emplace_back("Back to Editor", 10, SCREEN_HEIGHT - 50, 200, 40, []() { currentAppState = AppState::SCHEMATIC_EDITOR; });
-    resultsViewButtons.emplace_back("Add/Manage Traces", 10, 70, 200, 30, []() { show_trace_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
-    resultsViewButtons.emplace_back("Adjust Scale", 10, 110, 200, 30, []() { show_scale_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
+    resultsViewButtons.emplace_back("Probe Current", 10, 70, 200, 30, []() { currentInteractionMode = InteractionMode::PROBE_CURRENT; });
+    resultsViewButtons.emplace_back("Manage Traces", 10, 110, 200, 30, []() { show_trace_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
+    resultsViewButtons.emplace_back("Adjust Scale", 10, 150, 200, 30, []() { show_scale_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
 
     vector<ComponentMenuItem> componentMenuItems;
     const int COMP_ITEM_W = 150, COMP_ITEM_H = 100, COMP_ITEM_PAD = 10;
@@ -1888,17 +1898,41 @@ int main(int argc, char* args[]) {
 
             } else if (currentAppState == AppState::RESULTS_VIEW) {
                 // --- Results View Event Handling ---
-                if (e.type == SDL_KEYDOWN && !show_trace_dialog && !show_scale_dialog) {
-                    if (e.key.keysym.sym == SDLK_RIGHT) {
-                        if (last_simulated_circuit && !last_simulated_circuit->tran_results.empty() && cursor_index < last_simulated_circuit->tran_results.size() - 1) {
-                            cursor_index++;
+                if (currentInteractionMode == InteractionMode::PROBE_CURRENT) {
+                    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+                        currentInteractionMode = InteractionMode::NONE;
+                    } else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
+                        int mouseX, mouseY;
+                        SDL_GetMouseState(&mouseX, &mouseY);
+                        SDL_Point clickPoint = { mouseX, mouseY };
+
+                        // Find closest component
+                        int component_to_probe = -1;
+                        double min_dist_sq = 15 * 15; // Click threshold
+                        for (int i = 0; i < components.size(); ++i) {
+                            double d = dist_to_segment_sq(clickPoint, components[i].node1, components[i].node2);
+                            if (d < min_dist_sq) {
+                                min_dist_sq = d;
+                                component_to_probe = i;
+                            }
                         }
-                        if (last_simulated_circuit && !last_simulated_circuit->dc_sweep_results.empty() && cursor_index < last_simulated_circuit->dc_sweep_results.size() - 1) {
-                            cursor_index++;
-                        }
-                    } else if (e.key.keysym.sym == SDLK_LEFT) {
-                        if (cursor_index > 0) {
-                            cursor_index--;
+
+                        if (component_to_probe != -1) {
+                            string trace_name = "I(" + components[component_to_probe].id + ")";
+
+                            // Check for duplicates
+                            bool found = false;
+                            for(const auto& pv : plotted_variables) {
+                                if (pv.name == trace_name) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                plotted_variables.push_back({trace_name, plot_colors[plotted_variables.size() % plot_colors.size()]});
+                            }
+                            currentInteractionMode = InteractionMode::NONE; // Exit probe mode after a successful probe
                         }
                     }
                 }
@@ -2006,6 +2040,20 @@ int main(int argc, char* args[]) {
                         }
                     }
                 } else {
+                    if (e.type == SDL_KEYDOWN) {
+                        if (e.key.keysym.sym == SDLK_RIGHT) {
+                            if (last_simulated_circuit && !last_simulated_circuit->tran_results.empty() && cursor_index < last_simulated_circuit->tran_results.size() - 1) {
+                                cursor_index++;
+                            }
+                            if (last_simulated_circuit && !last_simulated_circuit->dc_sweep_results.empty() && cursor_index < last_simulated_circuit->dc_sweep_results.size() - 1) {
+                                cursor_index++;
+                            }
+                        } else if (e.key.keysym.sym == SDLK_LEFT) {
+                            if (cursor_index > 0) {
+                                cursor_index--;
+                            }
+                        }
+                    }
                     for (auto& b : resultsViewButtons) {
                         b.handle_event(&e);
                     }
@@ -2070,7 +2118,7 @@ int main(int argc, char* args[]) {
 
         } else if (currentAppState == AppState::RESULTS_VIEW) {
             // --- Results View Rendering ---
-            render_results_view(renderer, uiFont, resultsViewButtons);
+            render_results_view(renderer, uiFont, resultsViewButtons, componentMenuItems);
         }
 
         SDL_RenderPresent(renderer);
