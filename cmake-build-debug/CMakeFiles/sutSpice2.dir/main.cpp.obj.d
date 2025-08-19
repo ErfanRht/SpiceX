@@ -319,4 +319,5 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: \
  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/mingw32/bits/c++io.h \
  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/bits/fstream.tcc \
  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfloat \
- C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/float.h
+ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/float.h \
+ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/complex

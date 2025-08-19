@@ -221,6 +221,7 @@ CMakeFiles/sutSpice2.dir/main.cpp.obj: C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/ma
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cfloat \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/clocale \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cmath \
+  C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/complex \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdint \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdio \
   C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdlib \
@@ -824,6 +825,8 @@ C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cerrno:
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/clocale:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cmath:
+
+C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/complex:
 
 C:/Users/Erfan/Dev/Cpp/MinGW/MinGW/lib/gcc/mingw32/5.1.0/include/c++/cstdint:
 
