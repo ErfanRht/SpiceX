@@ -50,6 +50,7 @@ struct ScaleSettings {
 ScaleSettings manual_scale;
 bool show_scale_dialog = false;
 int cursor_index = 0;
+int auto_browse_direction = 1;
 map<string, pair<string, string>> component_id_to_nodes;
 inline string to_lower_util(string s) {
     transform(s.begin(), s.end(), s.begin(),
@@ -441,14 +442,20 @@ namespace SpiceEngine {
             size_t start_paren = combined_params.find('('), end_paren = combined_params.rfind(')');
             if (start_paren == string::npos || end_paren == string::npos) throw runtime_error("Mismatched parentheses in SIN() for " + name);
             stringstream ss(combined_params.substr(start_paren + 1, end_paren - start_paren - 1));
-            string offset_str, amp_str, freq_str;
-            ss >> offset_str >> amp_str >> freq_str;
-            if (ss.fail() || !ss.eof()) throw runtime_error("Invalid parameters inside SIN() for " + name);
+            string offset_str, amp_str, freq_str, phase_str;
+            ss >> offset_str >> amp_str >> freq_str >> phase_str;
+            if (ss.fail() && !phase_str.empty()) {
+                throw runtime_error("Invalid parameters inside SIN() for " + name);
+            }
             sourceType = SINUSOIDAL;
             dc_offset = parse_value_with_metric_prefix_util(offset_str);
             amplitude = parse_value_with_metric_prefix_util(amp_str);
             frequency = parse_value_with_metric_prefix_util(freq_str);
-            phase_degrees = 0.0;
+            if (!phase_str.empty()) {
+                phase_degrees = parse_value_with_metric_prefix_util(phase_str);
+            } else {
+                phase_degrees = 0.0;
+            }
             this->value = dc_offset;
         }
         else if (first_param_upper.rfind("pulse", 0) == 0) {
@@ -526,7 +533,7 @@ namespace SpiceEngine {
     }
     void VoltageSource::update_time_dependant_value(double time) {
         if (sourceType == SINUSOIDAL) {
-            value = (frequency > 0) ? (dc_offset + amplitude * sin(2 * PI * frequency * time)) : (dc_offset + amplitude);
+            value = (frequency > 0) ? (dc_offset + amplitude * sin(2 * PI * frequency * time + (phase_degrees * PI / 180.0))) : (dc_offset + amplitude);
         }
         else if (sourceType == PULSE) {
             if (time < td) value = v1;
@@ -941,7 +948,14 @@ namespace SpiceEngine {
             }
         }
         if (!sweep_src) throw runtime_error("AC sweep source not found or is not an AC/SIN source.");
-        double orig_phase = sweep_src->phase_degrees;
+        map<VoltageSource*, pair<double, double>> original_states;
+        for (auto* vs : voltage_source_list) {
+            if (vs->sourceType == VoltageSource::AC || vs->sourceType == VoltageSource::SINUSOIDAL) {
+                original_states[vs] = {vs->amplitude, vs->phase_degrees};
+                vs->amplitude = 0.0;
+            }
+        }
+        sweep_src->amplitude = 1.0;
         int M = voltage_source_list.size() + inductor_list.size();
         if (N + M == 0) { phase_sweep_solved = true; return; }
         double omega = 2 * PI * freq;
@@ -958,7 +972,7 @@ namespace SpiceEngine {
                 complex<double> v = solution[i];
                 double v_mag = abs(v);
                 double v_phase = arg(v) * 180.0 / PI;
-                result_at_phase["V(" + node_name + ")"] = v_mag;
+                result_at_phase["V(" + node_name + ")"] = v_phase;
                 result_at_phase["V_mag(" + node_name + ")"] = v_mag;
                 result_at_phase["V_phase(" + node_name + ")"] = v_phase;
             }
@@ -971,13 +985,16 @@ namespace SpiceEngine {
                 complex<double> i = solution[N + p.second];
                 double i_mag = abs(i);
                 double i_phase = arg(i) * 180.0 / PI;
-                result_at_phase["I(" + comp_name + ")"] = i_mag;
+                result_at_phase["I(" + comp_name + ")"] = i_phase;
                 result_at_phase["I_mag(" + comp_name + ")"] = i_mag;
                 result_at_phase["I_phase(" + comp_name + ")"] = i_phase;
             }
             phase_sweep_results.push_back(result_at_phase);
         }
-        sweep_src->phase_degrees = orig_phase;
+        for (map<VoltageSource*, pair<double, double>>::const_iterator it = original_states.begin(); it != original_states.end(); ++it) {
+            it->first->amplitude = it->second.first;
+            it->first->phase_degrees = it->second.second;
+        }
         phase_sweep_solved = true;
     }
 }
@@ -1002,7 +1019,7 @@ bool isDrawingWire = false;
 SDL_Point firstInteractionPoint = { -1, -1 };
 enum class ComponentType {
     NONE, RESISTOR, CAPACITOR, INDUCTOR, DIODE,
-    DC_VOLTAGE_SOURCE, DC_CURRENT_SOURCE, AC_VOLTAGE_SOURCE
+    DC_VOLTAGE_SOURCE, DC_CURRENT_SOURCE, AC_VOLTAGE_SOURCE, PHASE_VOLTAGE_SOURCE
 };
 ComponentType selectedComponentType = ComponentType::NONE;
 int placementRotation = 0;
@@ -1043,16 +1060,25 @@ int dialog_file_list_scroll_offset = 0;
 int dialog_hovered_file_index = -1;
 class Button {
 public:
-    Button(string text, int x, int y, int w, int h, function<void()> onClick)
-            : m_text(text), m_position({ x, y, w, h }), m_onClick(onClick), m_is_hovered(false) {}
+    string m_text;
+    string m_text_active;
     SDL_Rect m_position;
     function<void()> m_onClick;
     bool m_is_hovered;
+    bool m_is_toggle;
+    bool m_is_active;
+    Button(string text, int x, int y, int w, int h, function<void()> onClick, bool is_toggle = false, string text_active = "")
+            : m_text(text), m_position({ x, y, w, h }), m_onClick(onClick), m_is_hovered(false), m_is_toggle(is_toggle), m_is_active(false), m_text_active(text_active) {}
     void handle_event(SDL_Event* e) {
         if (e->type == SDL_MOUSEBUTTONDOWN) {
             int x, y;
             SDL_GetMouseState(&x, &y);
-            if (SDL_PointInRect(new const SDL_Point{ x, y }, &m_position)) m_onClick();
+            if (SDL_PointInRect(new const SDL_Point{ x, y }, &m_position)) {
+                if (m_is_toggle) {
+                    m_is_active = !m_is_active;
+                }
+                m_onClick();
+            }
         }
         else if (e->type == SDL_MOUSEMOTION) {
             int x, y;
@@ -1061,11 +1087,16 @@ public:
         }
     }
     void render(SDL_Renderer* renderer, TTF_Font* font) {
-        SDL_SetRenderDrawColor(renderer, m_is_hovered ? 0x66 : 0x44, m_is_hovered ? 0x66 : 0x44, m_is_hovered ? 0x66 : 0x44, 0xFF);
+        if (m_is_active) {
+            SDL_SetRenderDrawColor(renderer, 0x22, 0x8B, 0x22, 0xFF);
+        } else {
+            SDL_SetRenderDrawColor(renderer, m_is_hovered ? 0x66 : 0x44, m_is_hovered ? 0x66 : 0x44, m_is_hovered ? 0x66 : 0x44, 0xFF);
+        }
         SDL_RenderFillRect(renderer, &m_position);
-        if (font && !m_text.empty()) {
+        string text_to_render = (m_is_active && !m_text_active.empty()) ? m_text_active : m_text;
+        if (font && !text_to_render.empty()) {
             SDL_Color textColor = { 0xFF, 0xFF, 0xFF, 0xFF };
-            SDL_Surface* textSurface = TTF_RenderText_Solid(font, m_text.c_str(), textColor);
+            SDL_Surface* textSurface = TTF_RenderText_Solid(font, text_to_render.c_str(), textColor);
             if (textSurface) {
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
                 SDL_Rect renderQuad = { m_position.x + (m_position.w - textSurface->w) / 2, m_position.y + (m_position.h - textSurface->h) / 2, textSurface->w, textSurface->h };
@@ -1075,8 +1106,6 @@ public:
             }
         }
     }
-private:
-    string m_text;
 };
 struct ComponentMenuItem {
     string name;
@@ -1128,6 +1157,7 @@ void get_component_defaults(ComponentType type, string& value) {
         case ComponentType::DC_VOLTAGE_SOURCE: value = "5"; break;
         case ComponentType::DC_CURRENT_SOURCE: value = "1m"; break;
         case ComponentType::AC_VOLTAGE_SOURCE: value = "SIN(0 1 1k)"; break;
+        case ComponentType::PHASE_VOLTAGE_SOURCE: value = "SIN(0 1 1k 0)"; break;
         default: value = "?"; break;
     }
 }
@@ -1139,7 +1169,8 @@ string generate_component_name(ComponentType type) {
         case ComponentType::INDUCTOR: prefix = 'L'; break;
         case ComponentType::DIODE: prefix = 'D'; break;
         case ComponentType::DC_VOLTAGE_SOURCE:
-        case ComponentType::AC_VOLTAGE_SOURCE: prefix = 'V'; break;
+        case ComponentType::AC_VOLTAGE_SOURCE:
+        case ComponentType::PHASE_VOLTAGE_SOURCE: prefix = 'V'; break;
         case ComponentType::DC_CURRENT_SOURCE: prefix = 'I'; break;
         default: break;
     }
@@ -1155,6 +1186,7 @@ string component_type_to_string(ComponentType type) {
         case ComponentType::DC_VOLTAGE_SOURCE: return "DC_VOLTAGE_SOURCE";
         case ComponentType::DC_CURRENT_SOURCE: return "DC_CURRENT_SOURCE";
         case ComponentType::AC_VOLTAGE_SOURCE: return "AC_VOLTAGE_SOURCE";
+        case ComponentType::PHASE_VOLTAGE_SOURCE: return "PHASE_VOLTAGE_SOURCE";
         default: return "UNKNOWN";
     }
 }
@@ -1166,6 +1198,7 @@ ComponentType string_to_component_type(const string& str) {
     if (str == "DC_VOLTAGE_SOURCE") return ComponentType::DC_VOLTAGE_SOURCE;
     if (str == "DC_CURRENT_SOURCE") return ComponentType::DC_CURRENT_SOURCE;
     if (str == "AC_VOLTAGE_SOURCE") return ComponentType::AC_VOLTAGE_SOURCE;
+    if (str == "PHASE_VOLTAGE_SOURCE") return ComponentType::PHASE_VOLTAGE_SOURCE;
     return ComponentType::NONE;
 }
 void update_name_counters_from_id(ComponentType type, const string& id) {
@@ -1244,8 +1277,6 @@ void load_schematic(const string& filename_with_path) {
 void draw_schematic_elements(SDL_Renderer* renderer, TTF_Font* valueFont, const vector<ComponentMenuItem>& componentMenuIcons) {
     for (const auto& wire : wires) {
         thickLineRGBA(renderer, wire.start.x, wire.start.y, wire.end.x, wire.end.y, 3, 0xFF, 0xFF, 0xFF, 0xFF);
-        filledCircleRGBA(renderer, wire.start.x, wire.start.y, 4, 220, 20, 60, 0xFF);
-        filledCircleRGBA(renderer, wire.end.x, wire.end.y, 4, 220, 20, 60, 0xFF);
     }
     for (auto& comp : components) {
         SDL_Texture* iconTexture = nullptr;
@@ -1408,7 +1439,8 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
             case ComponentType::DIODE: circuit_out->add_component(make_unique<SpiceEngine::Diode>(comp.id, n1, n2, comp.value)); break;
             case ComponentType::DC_CURRENT_SOURCE: circuit_out->add_component(make_unique<SpiceEngine::CurrentSource>(comp.id, n1, n2, comp.value)); break;
             case ComponentType::DC_VOLTAGE_SOURCE:
-            case ComponentType::AC_VOLTAGE_SOURCE: {
+            case ComponentType::AC_VOLTAGE_SOURCE:
+            case ComponentType::PHASE_VOLTAGE_SOURCE: {
                 vector<string> params;
                 string temp_val = comp.value;
                 if (to_lower_util(temp_val).find("sin") != string::npos || to_lower_util(temp_val).find("pulse") != string::npos) {
@@ -1777,7 +1809,7 @@ double evaluate_expression(const string& expr, const SpiceEngine::ResultPoint& d
 }
 void render_trace_dialog(SDL_Renderer* renderer, TTF_Font* font);
 void render_scale_dialog(SDL_Renderer* renderer, TTF_Font* font);
-void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>& results_buttons, const vector<ComponentMenuItem>& componentMenuItems) {
+void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>& results_buttons, Button& autoBrowseButton, const vector<ComponentMenuItem>& componentMenuItems) {
     SDL_Rect controlPanel = { 0, 0, 220, SCREEN_HEIGHT };
     SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
     SDL_RenderFillRect(renderer, &controlPanel);
@@ -1789,6 +1821,9 @@ void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>&
     for (auto& button : results_buttons) {
         button.render(renderer, font);
     }
+    autoBrowseButton.m_position.x = graphArea.x + graphArea.w / 2 - 70;
+    autoBrowseButton.m_position.y = margin_top - 35;
+    autoBrowseButton.render(renderer, font);
     if (!last_simulated_circuit || plotted_variables.empty()) {
         render_text(renderer, font, "No data to display", graphArea.x + graphArea.w / 2, graphArea.y + graphArea.h / 2, { 150, 150, 150, 255 }, true, true);
         SDL_SetRenderDrawColor(renderer, 0x88, 0x88, 0x88, 0xFF);
@@ -1814,9 +1849,6 @@ void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>&
         return;
     }
     bool is_log_x = is_ac;
-    if (!results.empty() && results.front().count("frequency")) {
-        is_log_x = true;
-    }
     double y_min_auto = DBL_MAX, y_max_auto = -DBL_MAX;
     for (const auto& var : plotted_variables) {
         for (const auto& point : results) {
@@ -2078,6 +2110,7 @@ int main(int argc, char* args[]) {
     resultsViewButtons.emplace_back("Probe Power", 10, 130, 200, 30, []() { currentInteractionMode = InteractionMode::PROBE_POWER; });
     resultsViewButtons.emplace_back("Manage Traces", 10, 170, 200, 30, []() { show_trace_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
     resultsViewButtons.emplace_back("Adjust Scale", 10, 210, 200, 30, []() { show_scale_dialog = true; active_trace_dialog_field = 0; SDL_StartTextInput(); });
+    Button autoBrowseButton("Auto Browse", 0, 0, 140, 30, [](){}, true, "Stop Browsing");
     vector<ComponentMenuItem> componentMenuItems;
     const int COMP_ITEM_W = 150, COMP_ITEM_H = 100, COMP_ITEM_PAD = 10;
     auto selectComp = [&](ComponentType t) {
@@ -2093,6 +2126,7 @@ int main(int argc, char* args[]) {
     componentMenuItems.push_back({ "DC Voltage Src", ComponentType::DC_VOLTAGE_SOURCE, loadAndProcessTexture(ASSET_PATH + "voltage_source.png", renderer), Button("", 210, 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::DC_VOLTAGE_SOURCE); }) });
     componentMenuItems.push_back({ "DC Current Src", ComponentType::DC_CURRENT_SOURCE, loadAndProcessTexture(ASSET_PATH + "current_source.png", renderer), Button("", 210 + (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::DC_CURRENT_SOURCE); }) });
     componentMenuItems.push_back({ "AC Voltage Src", ComponentType::AC_VOLTAGE_SOURCE, loadAndProcessTexture(ASSET_PATH + "ac_voltage_source.png", renderer), Button("", 210 + 2 * (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::AC_VOLTAGE_SOURCE); }) });
+    componentMenuItems.push_back({ "Phase Voltage Src", ComponentType::PHASE_VOLTAGE_SOURCE, loadAndProcessTexture(ASSET_PATH + "ac_voltage_source.png", renderer), Button("", 210 + 3 * (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::PHASE_VOLTAGE_SOURCE); }) });
     auto start_component_placement_from_shortcut = [&](ComponentType t) {
         selectedComponentType = t;
         currentInteractionMode = InteractionMode::PLACE_COMPONENT;
@@ -2257,6 +2291,7 @@ int main(int argc, char* args[]) {
                 if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.handle_event(&e);
                 for (auto& b : topBarButtons) b.handle_event(&e);
             } else if (currentAppState == AppState::RESULTS_VIEW) {
+                autoBrowseButton.handle_event(&e);
                 if (currentInteractionMode == InteractionMode::PROBE_CURRENT || currentInteractionMode == InteractionMode::PROBE_VOLTAGE || currentInteractionMode == InteractionMode::PROBE_POWER) {
                     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
                         currentInteractionMode = InteractionMode::NONE;
@@ -2433,6 +2468,26 @@ int main(int argc, char* args[]) {
                 }
             }
         }
+        if (currentAppState == AppState::RESULTS_VIEW && autoBrowseButton.m_is_active) {
+            if(last_simulated_circuit) {
+                const auto& results = last_simulated_circuit->tran_solved ? last_simulated_circuit->tran_results :
+                                      last_simulated_circuit->dc_sweep_solved ? last_simulated_circuit->dc_sweep_results :
+                                      last_simulated_circuit->ac_sweep_solved ? last_simulated_circuit->ac_sweep_results :
+                                      last_simulated_circuit->phase_sweep_results;
+                if (!results.empty()) {
+                    cursor_index += auto_browse_direction;
+                    if (cursor_index >= (int)results.size() - 1) {
+                        cursor_index = (int)results.size() - 1;
+                        auto_browse_direction = -1;
+                    }
+                    if (cursor_index <= 0) {
+                        cursor_index = 0;
+                        auto_browse_direction = 1;
+                    }
+                }
+            }
+            SDL_Delay(20);
+        }
         SDL_SetRenderDrawColor(renderer, 0x22, 0x22, 0x22, 0xFF);
         SDL_RenderClear(renderer);
         if (currentAppState == AppState::SCHEMATIC_EDITOR) {
@@ -2461,7 +2516,7 @@ int main(int argc, char* args[]) {
             if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.render(renderer, uiFont);
             if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.render(renderer, uiFont);
             if (isComponentsMenuOpen) {
-                SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 2 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
+                SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 3 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
                 SDL_SetRenderDrawColor(renderer, 0x3A, 0x3A, 0x3A, 0xFF);
                 SDL_RenderFillRect(renderer, &menuPanel);
                 for (auto& item : componentMenuItems) {
@@ -2482,7 +2537,7 @@ int main(int argc, char* args[]) {
             }
             if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) render_dialog(renderer, uiFont);
         } else if (currentAppState == AppState::RESULTS_VIEW) {
-            render_results_view(renderer, uiFont, resultsViewButtons, componentMenuItems);
+            render_results_view(renderer, uiFont, resultsViewButtons, autoBrowseButton, componentMenuItems);
         }
         SDL_RenderPresent(renderer);
     }
