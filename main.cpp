@@ -7,6 +7,7 @@
 #else
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <dirent.h>
+#include <sys/stat.h>
 #endif
 #include <iostream>
 #include <vector>
@@ -34,6 +35,7 @@ const double PI = 3.14159265358979323846;
 const string BASE_PATH = "C:/Users/Erfan/Dev/Cpp/sutSpice_phase2/";
 const string ASSET_PATH = BASE_PATH + "assets/";
 const string SCHEMATICS_PATH = BASE_PATH + "schematics/";
+const string SUBCIRCUITS_PATH = BASE_PATH + "subcircuits/";
 enum class AppState {
     SCHEMATIC_EDITOR,
     RESULTS_VIEW
@@ -208,15 +210,13 @@ double dist_to_segment_sq(SDL_Point p, SDL_Point v, SDL_Point w) {
     double t = max(0.0, min(1.0, ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2));
     return pow(p.x - (v.x + t * (w.x - v.x)), 2) + pow(p.y - (v.y + t * (w.y - v.y)), 2);
 }
-vector<string> get_schematic_files() {
+vector<string> get_files_in_directory(const string& path, const string& extension) {
     vector<string> files;
-    string path = SCHEMATICS_PATH;
 #ifdef _WIN32
-    string search_path = path + "*.txt";
+    string search_path = path + "*" + extension;
     WIN32_FIND_DATAA find_data;
     HANDLE h_find = FindFirstFileA(search_path.c_str(), &find_data);
     if (h_find == INVALID_HANDLE_VALUE) {
-        files.push_back("Error: Directory not found or empty.");
         return files;
     }
     do {
@@ -231,25 +231,32 @@ vector<string> get_schematic_files() {
     if ((dir = opendir(path.c_str())) != NULL) {
         while ((ent = readdir(dir)) != NULL) {
             string filename = ent->d_name;
-            if (filename.length() > 4 && filename.substr(filename.length() - 4) == ".txt") {
+            if (filename.length() > extension.length() && filename.substr(filename.length() - extension.length()) == extension) {
                  files.push_back(filename);
             }
         }
         closedir(dir);
-    } else {
-        files.push_back("Error: Could not read directory.");
     }
 #endif
-    if (files.empty()) {
-        files.push_back("No .txt files found.");
-    }
     return files;
+}
+void create_directory_if_not_exists(const string& path) {
+#ifdef _WIN32
+    if (!CreateDirectoryA(path.c_str(), NULL)) {
+        if (GetLastError() != ERROR_ALREADY_EXISTS) {
+            cerr << "Failed to create directory: " << path << endl;
+        }
+    }
+#else
+    mkdir(path.c_str(), 0777);
+#endif
 }
 namespace SpiceEngine {
     class Circuit;
     enum class ComponentType {
         Resistor, Capacitor, Inductor, VoltageSource, CurrentSource,
-        VCVS, VCCS, CCVS, CCCS, Diode
+        VCVS, VCCS, CCVS, CCCS, Diode,
+        SubCircuit
     };
     using ResultPoint = map<string, double>;
     const string GROUND_NODE_NAME_CONST = "0";
@@ -355,6 +362,36 @@ namespace SpiceEngine {
         void stamp(Circuit& circuit, vector<vector<double>>& G, vector<vector<double>>&, vector<vector<double>>&, vector<vector<double>>&, vector<double>&, vector<double>&, map<string, int>&, double, const vector<double>&) override;
         void ac_stamp(Circuit& circuit, vector<vector<complex<double>>>& G, vector<vector<complex<double>>>&, vector<vector<complex<double>>>&, vector<vector<complex<double>>>&, vector<complex<double>>&, vector<complex<double>>&, map<string, int>&, double) override;
     };
+    class SubCircuit : public Component {
+    public:
+        double v_th = 0.0;
+        double r_th = 0.0;
+        SubCircuit(const string& sub_name, const string& n1, const string& n2, const string& filename)
+                : Component(sub_name, n1, n2, 0.0) {
+            ifstream inFile(SUBCIRCUITS_PATH + filename);
+            if (!inFile.is_open()) {
+                throw runtime_error("Could not open subcircuit file: " + filename);
+            }
+            string type_str;
+            getline(inFile, type_str, ',');
+            if (type_str == "THEVENIN") {
+                string v_th_str, r_th_str;
+                getline(inFile, v_th_str, ',');
+                getline(inFile, r_th_str);
+                v_th = stod(v_th_str);
+                r_th = stod(r_th_str);
+            } else {
+                throw runtime_error("Invalid subcircuit file format: " + filename);
+            }
+            inFile.close();
+        }
+        ComponentType get_type() const override { return ComponentType::SubCircuit; }
+        string to_netlist_string() const override {
+            return name + " " + node1_name + " " + node2_name + " SUBCKT(Vth=" + to_string(v_th) + ", Rth=" + to_string(r_th) + ")";
+        }
+        void stamp(Circuit& circuit, vector<vector<double>>& G, vector<vector<double>>& B, vector<vector<double>>& C, vector<vector<double>>& D, vector<double>& J, vector<double>& E, map<string, int>& m_map, double, const vector<double>&) override;
+        void ac_stamp(Circuit& circuit, vector<vector<complex<double>>>& G, vector<vector<complex<double>>>& B, vector<vector<complex<double>>>& C, vector<vector<complex<double>>>& D, vector<complex<double>>& J, vector<complex<double>>& E, map<string, int>& m_map, double omega) override;
+    };
     class Circuit {
     public:
         vector<unique_ptr<Component>> components;
@@ -367,6 +404,7 @@ namespace SpiceEngine {
         vector<Diode*> diode_list;
         vector<Component*> vcvs_list;
         vector<Component*> ccvs_list;
+        vector<SubCircuit*> subcircuit_list;
         bool tran_solved = false;
         vector<ResultPoint> tran_results;
         double tran_t_stop = 0.0;
@@ -407,6 +445,7 @@ namespace SpiceEngine {
         void perform_dc_sweep_analysis(const string& src, double start, double end, double inc);
         void perform_ac_sweep_analysis(const string& src_name, double f_start, double f_end, int points_per_decade);
         void perform_phase_sweep_analysis(double freq, const string& src, double p_start, double p_end, double p_inc);
+        void perform_dc_operating_point(ResultPoint& results);
     };
     void Resistor::stamp(Circuit& circuit, vector<vector<double>>& G, vector<vector<double>>&, vector<vector<double>>&, vector<vector<double>>&, vector<double>&, vector<double>&, map<string, int>&, double, const vector<double>&) {
         double conductance = 1.0 / value;
@@ -645,6 +684,60 @@ namespace SpiceEngine {
             G[idx2][idx1] -= conductance;
         }
     }
+    void SubCircuit::stamp(Circuit& circuit, vector<vector<double>>& G, vector<vector<double>>& B, vector<vector<double>>& C, vector<vector<double>>&, vector<double>& J, vector<double>& E, map<string, int>& m_map, double, const vector<double>&) {
+        int idx1 = circuit.get_node_matrix_index(node1_name);
+        int idx2 = circuit.get_node_matrix_index(node2_name);
+        if (abs(r_th) < 1e-9) {
+            int m_idx = m_map.at(name);
+            if (idx1 >= 0) {
+                B[idx1][m_idx] += 1.0;
+                C[m_idx][idx1] += 1.0;
+            }
+            if (idx2 >= 0) {
+                B[idx2][m_idx] -= 1.0;
+                C[m_idx][idx2] -= 1.0;
+            }
+            E[m_idx] += v_th;
+        } else {
+            double conductance = 1.0 / r_th;
+            if (idx1 >= 0) G[idx1][idx1] += conductance;
+            if (idx2 >= 0) G[idx2][idx2] += conductance;
+            if (idx1 >= 0 && idx2 >= 0) {
+                G[idx1][idx2] -= conductance;
+                G[idx2][idx1] -= conductance;
+            }
+            double i_norton = v_th / r_th;
+            if (idx1 >= 0) J[idx1] -= i_norton;
+            if (idx2 >= 0) J[idx2] += i_norton;
+        }
+    }
+    void SubCircuit::ac_stamp(Circuit& circuit, vector<vector<complex<double>>>& G, vector<vector<complex<double>>>& B, vector<vector<complex<double>>>& C, vector<vector<complex<double>>>&, vector<complex<double>>& J, vector<complex<double>>& E, map<string, int>& m_map, double omega) {
+        int idx1 = circuit.get_node_matrix_index(node1_name);
+        int idx2 = circuit.get_node_matrix_index(node2_name);
+        if (abs(r_th) < 1e-9) {
+            int m_idx = m_map.at(name);
+            if (idx1 >= 0) {
+                B[idx1][m_idx] += 1.0;
+                C[m_idx][idx1] += 1.0;
+            }
+            if (idx2 >= 0) {
+                B[idx2][m_idx] -= 1.0;
+                C[m_idx][idx2] -= 1.0;
+            }
+            E[m_idx] += v_th;
+        } else {
+            complex<double> conductance = 1.0 / r_th;
+            if (idx1 >= 0) G[idx1][idx1] += conductance;
+            if (idx2 >= 0) G[idx2][idx2] += conductance;
+            if (idx1 >= 0 && idx2 >= 0) {
+                G[idx1][idx2] -= conductance;
+                G[idx2][idx1] -= conductance;
+            }
+            complex<double> i_norton = v_th / r_th;
+            if (idx1 >= 0) J[idx1] -= i_norton;
+            if (idx2 >= 0) J[idx2] += i_norton;
+        }
+    }
     int Circuit::prepare_for_analysis() {
         node_to_idx.clear();
         idx_to_node_name.clear();
@@ -653,6 +746,7 @@ namespace SpiceEngine {
         vcvs_list.clear();
         ccvs_list.clear();
         diode_list.clear();
+        subcircuit_list.clear();
         set<string> unique_node_names;
         for (const auto& comp : components) {
             unique_node_names.insert(comp->node1_name);
@@ -660,6 +754,11 @@ namespace SpiceEngine {
             if (auto vs = dynamic_cast<VoltageSource*>(comp.get())) voltage_source_list.push_back(vs);
             else if (auto ind = dynamic_cast<Inductor*>(comp.get())) inductor_list.push_back(ind);
             else if (auto d = dynamic_cast<Diode*>(comp.get())) diode_list.push_back(d);
+            else if (auto sub = dynamic_cast<SubCircuit*>(comp.get())) {
+                if (abs(sub->r_th) < 1e-9) {
+                    subcircuit_list.push_back(sub);
+                }
+            }
         }
         if (!ground_node_exists && (unique_node_names.count("0") || unique_node_names.count("GND"))) {
             set_ground_node(unique_node_names.count("0") ? "0" : "GND");
@@ -690,7 +789,7 @@ namespace SpiceEngine {
     void Circuit::build_mna_matrix(vector<vector<double>>& A, vector<double>& z, double h, const vector<double>& prev_sol) {
         if (!components.empty() && !ground_node_exists) throw runtime_error("No ground node defined.");
         int N = idx_to_node_name.size();
-        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
         int system_size = N + M;
         if (system_size == 0 && diode_list.empty()) {
             A.clear(); z.clear(); return;
@@ -703,6 +802,7 @@ namespace SpiceEngine {
         int m_counter = 0;
         for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
         for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+        for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
         for (const auto& comp : components) comp->stamp(*this, G, B, C, D, J, E, m_map, h, prev_sol);
         for (int i = 0; i < N; ++i) for (int j = 0; j < N; ++j) A[i][j] = G[i][j];
         for (int i = 0; i < N; ++i) for (int j = 0; j < M; ++j) A[i][N + j] = B[i][j];
@@ -714,7 +814,7 @@ namespace SpiceEngine {
     void Circuit::build_ac_mna_matrix(vector<vector<complex<double>>>& A, vector<complex<double>>& z, double omega) {
         if (!components.empty() && !ground_node_exists) throw runtime_error("No ground node defined.");
         int N = idx_to_node_name.size();
-        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
         int system_size = N + M;
         if (system_size == 0) {
             A.clear(); z.clear(); return;
@@ -727,6 +827,7 @@ namespace SpiceEngine {
         int m_counter = 0;
         for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
         for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+        for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
         for (const auto& comp : components) comp->ac_stamp(*this, G, B, C, D, J, E, m_map, omega);
         for (int i = 0; i < N; ++i) for (int j = 0; j < N; ++j) A[i][j] = G[i][j];
         for (int i = 0; i < N; ++i) for (int j = 0; j < M; ++j) A[i][N + j] = B[i][j];
@@ -763,7 +864,7 @@ namespace SpiceEngine {
         if (t_step <= 0 || t_stop <= 0 || t_step > t_stop) throw runtime_error("Invalid transient parameters.");
         this->tran_t_stop = t_stop;
         int N = prepare_for_analysis();
-        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
         if (N + M == 0 && diode_list.empty()) {
             tran_solved = true;
             return;
@@ -801,6 +902,7 @@ namespace SpiceEngine {
             int m_counter = 0;
             for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
             for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+            for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
             for (const auto& p : m_map) result_at_t["I(" + p.first + ")"] = current_solution[N + p.second];
             calculate_and_store_passive_currents(result_at_t, prev_result_point, t_step);
             tran_results.push_back(result_at_t);
@@ -825,7 +927,7 @@ namespace SpiceEngine {
         double orig_val = sweep_comp->value;
         dc_sweep_source_name = src;
         int N = prepare_for_analysis();
-        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
         if (N + M == 0 && diode_list.empty()) {
             dc_sweep_solved = true;
             return;
@@ -861,6 +963,7 @@ namespace SpiceEngine {
             int m_counter = 0;
             for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
             for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+            for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
             for (const auto& p : m_map) result_at_val["I(" + p.first + ")"] = solution[N + p.second];
             calculate_and_store_passive_currents(result_at_val, {}, 0.0);
             dc_sweep_results.push_back(result_at_val);
@@ -890,7 +993,7 @@ namespace SpiceEngine {
         }
         sweep_src->amplitude = 1.0;
         sweep_src->phase_degrees = 0.0;
-        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
         if (N + M == 0) { ac_sweep_solved = true; return; }
         double freq_multiplier = pow(10.0, 1.0 / points_per_decade);
         for (double freq = f_start; freq <= f_end * (1 + 1e-9); freq *= freq_multiplier) {
@@ -916,6 +1019,7 @@ namespace SpiceEngine {
             int m_counter = 0;
             for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
             for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+            for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
             for (const auto& p : m_map) {
                 string comp_name = p.first;
                 complex<double> i = solution[N + p.second];
@@ -956,7 +1060,7 @@ namespace SpiceEngine {
             }
         }
         sweep_src->amplitude = 1.0;
-        int M = voltage_source_list.size() + inductor_list.size();
+        int M = voltage_source_list.size() + inductor_list.size() + subcircuit_list.size();
         if (N + M == 0) { phase_sweep_solved = true; return; }
         double omega = 2 * PI * freq;
         for (double phase = p_start; (p_inc > 0) ? (phase <= p_end + abs(p_inc)/2.0) : (phase >= p_end - abs(p_inc)/2.0); phase += p_inc) {
@@ -980,6 +1084,7 @@ namespace SpiceEngine {
             int m_counter = 0;
             for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
             for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+            for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
             for (const auto& p : m_map) {
                 string comp_name = p.first;
                 complex<double> i = solution[N + p.second];
@@ -997,6 +1102,60 @@ namespace SpiceEngine {
         }
         phase_sweep_solved = true;
     }
+    void Circuit::perform_dc_operating_point(ResultPoint& results) {
+        results.clear();
+        int N = prepare_for_analysis();
+        int M = voltage_source_list.size() + inductor_list.size() + vcvs_list.size() + ccvs_list.size() + subcircuit_list.size();
+        if (N + M == 0 && diode_list.empty()) {
+            return;
+        }
+        for (auto* d : diode_list) { d->is_on = false; }
+        const int MAX_DIODE_ITERATIONS = 100;
+        bool diodes_converged = false;
+        vector<double> solution;
+        for (int iter = 0; iter < MAX_DIODE_ITERATIONS; ++iter) {
+            vector<vector<double>> A;
+            vector<double> z;
+            build_mna_matrix(A, z, 0.0, {});
+            solution = gaussian_elimination_matrix(A, z);
+            if (diode_list.empty()) {
+                diodes_converged = true;
+                break;
+            }
+            bool state_changed = false;
+            for (auto* d : diode_list) {
+                bool old_state = d->is_on;
+                double v1 = (get_node_matrix_index(d->node1_name) >= 0 && get_node_matrix_index(d->node1_name) < solution.size()) ? solution[get_node_matrix_index(d->node1_name)] : 0.0;
+                double v2 = (get_node_matrix_index(d->node2_name) >= 0 && get_node_matrix_index(d->node2_name) < solution.size()) ? solution[get_node_matrix_index(d->node2_name)] : 0.0;
+                d->is_on = (v1 > v2);
+                if (d->is_on != old_state) {
+                    state_changed = true;
+                }
+            }
+            if (!state_changed) {
+                diodes_converged = true;
+                break;
+            }
+        }
+        if (!diodes_converged) {
+            throw runtime_error("Diode model failed to converge in DC operating point analysis.");
+        }
+        for (int i = 0; i < N; ++i) {
+            results["V(" + idx_to_node_name[i] + ")"] = solution[i];
+        }
+        if (ground_node_exists) {
+            results["V(" + ground_node_explicit_name + ")"] = 0.0;
+        }
+        map<string, int> m_map;
+        int m_counter = 0;
+        for (const auto& vs : voltage_source_list) m_map[vs->name] = m_counter++;
+        for (const auto& l : inductor_list) m_map[l->name] = m_counter++;
+        for (const auto& sub : subcircuit_list) m_map[sub->name] = m_counter++;
+        for (const auto& p : m_map) {
+            results["I(" + p.first + ")"] = solution[N + p.second];
+        }
+        calculate_and_store_passive_currents(results, {}, 0.0);
+    }
 }
 unique_ptr<SpiceEngine::Circuit> last_simulated_circuit;
 bool show_trace_dialog = false;
@@ -1009,19 +1168,24 @@ vector<SDL_Color> plot_colors = {
 bool isFileMenuOpen = false;
 bool isComponentsMenuOpen = false;
 bool isSimulateMenuOpen = false;
+bool isSubcircuitsMenuOpen = false;
 enum class InteractionMode {
     NONE, WIRING, PLACE_COMPONENT, DRAGGING_COMPONENT, DELETE_ITEM,
     EDITING_COMPONENT_VALUE, PLACE_LABEL, EDITING_LABEL_TEXT, PLACE_GND_LABEL, DIALOG_ACTIVE,
-    PROBE_CURRENT, PROBE_VOLTAGE, PROBE_POWER
+    PROBE_CURRENT, PROBE_VOLTAGE, PROBE_POWER,
+    SELECT_SUBCIRCUIT_NODES
 };
 InteractionMode currentInteractionMode = InteractionMode::NONE;
 bool isDrawingWire = false;
 SDL_Point firstInteractionPoint = { -1, -1 };
+vector<SDL_Point> subcircuit_terminal_points;
 enum class ComponentType {
     NONE, RESISTOR, CAPACITOR, INDUCTOR, DIODE,
-    DC_VOLTAGE_SOURCE, DC_CURRENT_SOURCE, AC_VOLTAGE_SOURCE, PHASE_VOLTAGE_SOURCE
+    DC_VOLTAGE_SOURCE, DC_CURRENT_SOURCE, AC_VOLTAGE_SOURCE, PHASE_VOLTAGE_SOURCE,
+    SUBCIRCUIT
 };
 ComponentType selectedComponentType = ComponentType::NONE;
+string selectedSubcircuitFilename = "";
 int placementRotation = 0;
 struct Wire { SDL_Point start, end; };
 struct Component {
@@ -1046,7 +1210,7 @@ string textInputBuffer = "";
 string currentSchematicFileName = "";
 bool schematicModified = false;
 map<ComponentType, int> componentNameCounters;
-enum class DialogType { NONE, SAVE_AS, OPEN, TRANSIENT_ANALYSIS, DC_SWEEP_ANALYSIS, AC_SWEEP_ANALYSIS, PHASE_SWEEP_ANALYSIS };
+enum class DialogType { NONE, SAVE_AS, OPEN, TRANSIENT_ANALYSIS, DC_SWEEP_ANALYSIS, AC_SWEEP_ANALYSIS, PHASE_SWEEP_ANALYSIS, SAVE_SUBCIRCUIT };
 DialogType activeDialogType = DialogType::NONE;
 struct DialogField {
     string label, buffer;
@@ -1113,6 +1277,11 @@ struct ComponentMenuItem {
     SDL_Texture* iconTexture = nullptr;
     Button button;
 };
+struct SubcircuitMenuItem {
+    string name;
+    string filename;
+    Button button;
+};
 SDL_Point snap_to_grid(int x, int y) {
     int snappedX = round((float)x / GRID_SPACING) * GRID_SPACING;
     int snappedY = round((float)y / GRID_SPACING) * GRID_SPACING;
@@ -1158,6 +1327,7 @@ void get_component_defaults(ComponentType type, string& value) {
         case ComponentType::DC_CURRENT_SOURCE: value = "1m"; break;
         case ComponentType::AC_VOLTAGE_SOURCE: value = "SIN(0 1 1k)"; break;
         case ComponentType::PHASE_VOLTAGE_SOURCE: value = "SIN(0 1 1k 0)"; break;
+        case ComponentType::SUBCIRCUIT: value = "sub.txt"; break;
         default: value = "?"; break;
     }
 }
@@ -1172,6 +1342,7 @@ string generate_component_name(ComponentType type) {
         case ComponentType::AC_VOLTAGE_SOURCE:
         case ComponentType::PHASE_VOLTAGE_SOURCE: prefix = 'V'; break;
         case ComponentType::DC_CURRENT_SOURCE: prefix = 'I'; break;
+        case ComponentType::SUBCIRCUIT: prefix = 'U'; break;
         default: break;
     }
     componentNameCounters[type]++;
@@ -1187,6 +1358,7 @@ string component_type_to_string(ComponentType type) {
         case ComponentType::DC_CURRENT_SOURCE: return "DC_CURRENT_SOURCE";
         case ComponentType::AC_VOLTAGE_SOURCE: return "AC_VOLTAGE_SOURCE";
         case ComponentType::PHASE_VOLTAGE_SOURCE: return "PHASE_VOLTAGE_SOURCE";
+        case ComponentType::SUBCIRCUIT: return "SUBCIRCUIT";
         default: return "UNKNOWN";
     }
 }
@@ -1199,6 +1371,7 @@ ComponentType string_to_component_type(const string& str) {
     if (str == "DC_CURRENT_SOURCE") return ComponentType::DC_CURRENT_SOURCE;
     if (str == "AC_VOLTAGE_SOURCE") return ComponentType::AC_VOLTAGE_SOURCE;
     if (str == "PHASE_VOLTAGE_SOURCE") return ComponentType::PHASE_VOLTAGE_SOURCE;
+    if (str == "SUBCIRCUIT") return ComponentType::SUBCIRCUIT;
     return ComponentType::NONE;
 }
 void update_name_counters_from_id(ComponentType type, const string& id) {
@@ -1279,13 +1452,25 @@ void draw_schematic_elements(SDL_Renderer* renderer, TTF_Font* valueFont, const 
         thickLineRGBA(renderer, wire.start.x, wire.start.y, wire.end.x, wire.end.y, 3, 0xFF, 0xFF, 0xFF, 0xFF);
     }
     for (auto& comp : components) {
-        SDL_Texture* iconTexture = nullptr;
-        for (const auto& item : componentMenuIcons) if (item.type == comp.type) { iconTexture = item.iconTexture; break; }
         int center_x = (comp.node1.x + comp.node2.x) / 2, center_y = (comp.node1.y + comp.node2.y) / 2;
-        if (iconTexture) {
-            int icon_size = COMPONENT_DEFAULT_LENGTH;
-            SDL_Rect destRect = { center_x - icon_size / 2, center_y - icon_size / 2, icon_size, icon_size };
-            SDL_RenderCopyEx(renderer, iconTexture, nullptr, &destRect, comp.rotation_angle, nullptr, SDL_FLIP_NONE);
+        if (comp.type == ComponentType::SUBCIRCUIT) {
+            int width = COMPONENT_DEFAULT_LENGTH;
+            int height = COMPONENT_DEFAULT_LENGTH * 1.5;
+            SDL_Rect box_rect = {center_x - width/2, center_y - height/2, width, height};
+            SDL_SetRenderDrawColor(renderer, 0x33, 0x66, 0x99, 0xFF);
+            SDL_RenderFillRect(renderer, &box_rect);
+            SDL_SetRenderDrawColor(renderer, 0xAA, 0xCC, 0xFF, 0xFF);
+            SDL_RenderDrawRect(renderer, &box_rect);
+            thickLineRGBA(renderer, comp.node1.x, comp.node1.y, box_rect.x, comp.node1.y, 3, 255, 255, 255, 255);
+            thickLineRGBA(renderer, comp.node2.x, comp.node2.y, box_rect.x + box_rect.w, comp.node2.y, 3, 255, 255, 255, 255);
+        } else {
+            SDL_Texture* iconTexture = nullptr;
+            for (const auto& item : componentMenuIcons) if (item.type == comp.type) { iconTexture = item.iconTexture; break; }
+            if (iconTexture) {
+                int icon_size = COMPONENT_DEFAULT_LENGTH;
+                SDL_Rect destRect = { center_x - icon_size / 2, center_y - icon_size / 2, icon_size, icon_size };
+                SDL_RenderCopyEx(renderer, iconTexture, nullptr, &destRect, comp.rotation_angle, nullptr, SDL_FLIP_NONE);
+            }
         }
         filledCircleRGBA(renderer, comp.node1.x, comp.node1.y, 7, 220, 20, 60, 0xFF);
         filledCircleRGBA(renderer, comp.node2.x, comp.node2.y, 7, 220, 20, 60, 0xFF);
@@ -1331,6 +1516,12 @@ void draw_schematic_elements(SDL_Renderer* renderer, TTF_Font* valueFont, const 
             SDL_RenderCopy(renderer, textTexture, nullptr, &label.text_rect);
             SDL_FreeSurface(textSurface);
             SDL_DestroyTexture(textTexture);
+        }
+    }
+    if (currentInteractionMode == InteractionMode::SELECT_SUBCIRCUIT_NODES) {
+        for (const auto& p : subcircuit_terminal_points) {
+            filledCircleRGBA(renderer, p.x, p.y, 10, 0, 255, 255, 200);
+            circleRGBA(renderer, p.x, p.y, 11, 255, 255, 255, 255);
         }
     }
 }
@@ -1418,14 +1609,13 @@ map<string, string> resolve_node_names(string& out_ground_node_name) {
     }
     return point_to_node_name_map;
 }
-void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogField>& fields, unique_ptr<SpiceEngine::Circuit>& circuit_out) {
-    cout << "\n--- Preparing Simulation ---" << endl;
-    circuit_out = make_unique<SpiceEngine::Circuit>();
-    component_id_to_nodes.clear();
+void calculate_and_save_thevenin_subcircuit(const string& filename);
+unique_ptr<SpiceEngine::Circuit> create_spice_circuit_from_gui() {
+    auto circuit = make_unique<SpiceEngine::Circuit>();
     string ground_node_name;
     auto point_to_node_name_map = resolve_node_names(ground_node_name);
     if (!ground_node_name.empty()) {
-        circuit_out->set_ground_node(ground_node_name);
+        circuit->set_ground_node(ground_node_name);
     }
     auto point_to_key = [](SDL_Point p) { return to_string(p.x) + "," + to_string(p.y); };
     for (const auto& comp : components) {
@@ -1433,11 +1623,11 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
         string n2 = point_to_node_name_map.at(point_to_key(comp.node2));
         component_id_to_nodes[comp.id] = {n1, n2};
         switch (comp.type) {
-            case ComponentType::RESISTOR: circuit_out->add_component(make_unique<SpiceEngine::Resistor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::CAPACITOR: circuit_out->add_component(make_unique<SpiceEngine::Capacitor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::INDUCTOR: circuit_out->add_component(make_unique<SpiceEngine::Inductor>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::DIODE: circuit_out->add_component(make_unique<SpiceEngine::Diode>(comp.id, n1, n2, comp.value)); break;
-            case ComponentType::DC_CURRENT_SOURCE: circuit_out->add_component(make_unique<SpiceEngine::CurrentSource>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::RESISTOR: circuit->add_component(make_unique<SpiceEngine::Resistor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::CAPACITOR: circuit->add_component(make_unique<SpiceEngine::Capacitor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::INDUCTOR: circuit->add_component(make_unique<SpiceEngine::Inductor>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::DIODE: circuit->add_component(make_unique<SpiceEngine::Diode>(comp.id, n1, n2, comp.value)); break;
+            case ComponentType::DC_CURRENT_SOURCE: circuit->add_component(make_unique<SpiceEngine::CurrentSource>(comp.id, n1, n2, comp.value)); break;
             case ComponentType::DC_VOLTAGE_SOURCE:
             case ComponentType::AC_VOLTAGE_SOURCE:
             case ComponentType::PHASE_VOLTAGE_SOURCE: {
@@ -1448,16 +1638,23 @@ void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogFie
                 } else {
                     stringstream ss(temp_val);
                     string token;
-                    while(ss >> token) {
-                        params.push_back(token);
-                    }
+                    while(ss >> token) params.push_back(token);
                 }
-                circuit_out->add_component(make_unique<SpiceEngine::VoltageSource>(comp.id, n1, n2, params));
+                circuit->add_component(make_unique<SpiceEngine::VoltageSource>(comp.id, n1, n2, params));
                 break;
             }
+            case ComponentType::SUBCIRCUIT:
+                circuit->add_component(make_unique<SpiceEngine::SubCircuit>(comp.id, n1, n2, comp.value));
+                break;
             default: break;
         }
     }
+    return circuit;
+}
+void run_simulation_in_terminal(DialogType analysis_type, const vector<DialogField>& fields, unique_ptr<SpiceEngine::Circuit>& circuit_out) {
+    cout << "\n--- Preparing Simulation ---" << endl;
+    component_id_to_nodes.clear();
+    circuit_out = create_spice_circuit_from_gui();
     try {
         plotted_variables.clear();
         vector<string> requested_vars;
@@ -1597,6 +1794,15 @@ void handle_dialog_ok() {
             save_schematic(SCHEMATICS_PATH + filename);
         }
     }
+    else if (activeDialogType == DialogType::SAVE_SUBCIRCUIT) {
+        if (!dialogFields.empty() && !dialogFields[0].buffer.empty()) {
+            currentInteractionMode = InteractionMode::SELECT_SUBCIRCUIT_NODES;
+            subcircuit_terminal_points.clear();
+            cout << "Please select the two terminal nodes for the subcircuit." << endl;
+        }
+        activeDialogType = DialogType::NONE;
+        return;
+    }
     else if (activeDialogType == DialogType::TRANSIENT_ANALYSIS || activeDialogType == DialogType::DC_SWEEP_ANALYSIS || activeDialogType == DialogType::AC_SWEEP_ANALYSIS || activeDialogType == DialogType::PHASE_SWEEP_ANALYSIS) {
         run_simulation_in_terminal(activeDialogType, dialogFields, last_simulated_circuit);
         if (last_simulated_circuit && (last_simulated_circuit->tran_solved || last_simulated_circuit->dc_sweep_solved || last_simulated_circuit->ac_sweep_solved || last_simulated_circuit->phase_sweep_solved)) {
@@ -1612,7 +1818,7 @@ void setup_dialog(DialogType type, const string& title, const vector<string>& la
     dialogFields.clear();
     dialog_file_list.clear();
     if (type == DialogType::OPEN) {
-        dialog_file_list = get_schematic_files();
+        dialog_file_list = get_files_in_directory(SCHEMATICS_PATH, ".txt");
         dialog_file_list_scroll_offset = 0;
     } else {
         for (const auto& label : labels) dialogFields.push_back({ label, "" });
@@ -2083,21 +2289,25 @@ int main(int argc, char* args[]) {
         cerr << "Window or font creation failed." << endl;
         return -1;
     }
+    create_directory_if_not_exists(SCHEMATICS_PATH);
+    create_directory_if_not_exists(SUBCIRCUITS_PATH);
     vector<Button> topBarButtons;
-    topBarButtons.emplace_back("File", 10, 5, 80, 30, []() { isFileMenuOpen = !isFileMenuOpen; isComponentsMenuOpen = false; isSimulateMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
-    topBarButtons.emplace_back("Simulate", 100, 5, 100, 30, []() { isSimulateMenuOpen = !isSimulateMenuOpen; isFileMenuOpen = false; isComponentsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
-    topBarButtons.emplace_back("Add Component", 210, 5, 150, 30, []() { isComponentsMenuOpen = !isComponentsMenuOpen; isFileMenuOpen = false; isSimulateMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
-    topBarButtons.emplace_back("Add Wire", 370, 5, 100, 30, []() { currentInteractionMode = InteractionMode::WIRING; });
-    topBarButtons.emplace_back("Add GND", 480, 5, 100, 30, []() { currentInteractionMode = InteractionMode::PLACE_GND_LABEL; });
-    topBarButtons.emplace_back("Add Label", 590, 5, 100, 30, []() { currentInteractionMode = InteractionMode::PLACE_LABEL; });
-    topBarButtons.emplace_back("Delete", 700, 5, 100, 30, []() { currentInteractionMode = InteractionMode::DELETE_ITEM; });
+    topBarButtons.emplace_back("File", 10, 5, 80, 30, []() { isFileMenuOpen = !isFileMenuOpen; isComponentsMenuOpen = false; isSimulateMenuOpen = false; isSubcircuitsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
+    topBarButtons.emplace_back("Simulate", 100, 5, 100, 30, []() { isSimulateMenuOpen = !isSimulateMenuOpen; isFileMenuOpen = false; isComponentsMenuOpen = false; isSubcircuitsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
+    topBarButtons.emplace_back("Add Component", 210, 5, 150, 30, []() { isComponentsMenuOpen = !isComponentsMenuOpen; isFileMenuOpen = false; isSimulateMenuOpen = false; isSubcircuitsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
+    topBarButtons.emplace_back("Add Subcircuit", 370, 5, 150, 30, []() { isSubcircuitsMenuOpen = !isSubcircuitsMenuOpen; isFileMenuOpen = false; isSimulateMenuOpen = false; isComponentsMenuOpen = false; currentInteractionMode = InteractionMode::NONE; });
+    topBarButtons.emplace_back("Add Wire", 530, 5, 100, 30, []() { currentInteractionMode = InteractionMode::WIRING; });
+    topBarButtons.emplace_back("Add GND", 640, 5, 100, 30, []() { currentInteractionMode = InteractionMode::PLACE_GND_LABEL; });
+    topBarButtons.emplace_back("Add Label", 750, 5, 100, 30, []() { currentInteractionMode = InteractionMode::PLACE_LABEL; });
+    topBarButtons.emplace_back("Delete", 860, 5, 100, 30, []() { currentInteractionMode = InteractionMode::DELETE_ITEM; });
     vector<Button> fileMenuButtons;
     fileMenuButtons.emplace_back("New Schematic", 10, 40, 180, 30, []() { components.clear(); wires.clear(); labels.clear(); componentNameCounters.clear(); currentSchematicFileName = ""; schematicModified = false; isFileMenuOpen = false; });
     fileMenuButtons.emplace_back("Open...", 10, 70, 180, 30, []() { setup_dialog(DialogType::OPEN, "Open Schematic", {}); isFileMenuOpen = false; });
     fileMenuButtons.emplace_back("Save", 10, 100, 180, 30, []() { if (currentSchematicFileName.empty()) { setup_dialog(DialogType::SAVE_AS, "Save Schematic As", { "Filename" }); } else { save_schematic(SCHEMATICS_PATH + currentSchematicFileName); } isFileMenuOpen = false; });
     fileMenuButtons.emplace_back("Save As...", 10, 130, 180, 30, []() { setup_dialog(DialogType::SAVE_AS, "Save Schematic As", { "Filename" }); isFileMenuOpen = false; });
+    fileMenuButtons.emplace_back("Save as Subcircuit...", 10, 160, 180, 30, []() { setup_dialog(DialogType::SAVE_SUBCIRCUIT, "Save as Subcircuit", { "Filename" }); isFileMenuOpen = false; });
     bool quit_flag = false;
-    fileMenuButtons.emplace_back("Exit", 10, 160, 180, 30, [&quit_flag]() { quit_flag = true; });
+    fileMenuButtons.emplace_back("Exit", 10, 190, 180, 30, [&quit_flag]() { quit_flag = true; });
     vector<Button> simulateMenuButtons;
     simulateMenuButtons.emplace_back("DC Sweep Analysis", 100, 40, 180, 30, []() { setup_dialog(DialogType::DC_SWEEP_ANALYSIS, "DC Sweep Analysis", { "Source Name", "Start Value", "End Value", "Increment", "Wanted Values" }); isSimulateMenuOpen = false; });
     simulateMenuButtons.emplace_back("Transient Analysis", 100, 70, 180, 30, []() { setup_dialog(DialogType::TRANSIENT_ANALYSIS, "Transient Analysis", { "Tstep", "Tstop", "Wanted Values" }); isSimulateMenuOpen = false; });
@@ -2127,6 +2337,30 @@ int main(int argc, char* args[]) {
     componentMenuItems.push_back({ "DC Current Src", ComponentType::DC_CURRENT_SOURCE, loadAndProcessTexture(ASSET_PATH + "current_source.png", renderer), Button("", 210 + (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::DC_CURRENT_SOURCE); }) });
     componentMenuItems.push_back({ "AC Voltage Src", ComponentType::AC_VOLTAGE_SOURCE, loadAndProcessTexture(ASSET_PATH + "ac_voltage_source.png", renderer), Button("", 210 + 2 * (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::AC_VOLTAGE_SOURCE); }) });
     componentMenuItems.push_back({ "Phase Voltage Src", ComponentType::PHASE_VOLTAGE_SOURCE, loadAndProcessTexture(ASSET_PATH + "ac_voltage_source.png", renderer), Button("", 210 + 3 * (COMP_ITEM_W + COMP_ITEM_PAD), 40 + (COMP_ITEM_H + COMP_ITEM_PAD), COMP_ITEM_W, COMP_ITEM_H, [=]() { selectComp(ComponentType::PHASE_VOLTAGE_SOURCE); }) });
+    vector<SubcircuitMenuItem> subcircuitMenuItems;
+    auto load_available_subcircuits = [&]() {
+        subcircuitMenuItems.clear();
+        vector<string> sub_files = get_files_in_directory(SUBCIRCUITS_PATH, ".sub");
+        int i = 0;
+        for (const auto& filename : sub_files) {
+            string name = filename.substr(0, filename.length() - 4);
+            int x = 370 + (i % 4) * (COMP_ITEM_W + COMP_ITEM_PAD);
+            int y = 40 + (i / 4) * (COMP_ITEM_H + COMP_ITEM_PAD);
+            subcircuitMenuItems.push_back({
+                                                  name,
+                                                  filename,
+                                                  Button("", x, y, COMP_ITEM_W, COMP_ITEM_H, [=]() {
+                                                      selectedComponentType = ComponentType::SUBCIRCUIT;
+                                                      selectedSubcircuitFilename = filename;
+                                                      currentInteractionMode = InteractionMode::PLACE_COMPONENT;
+                                                      isSubcircuitsMenuOpen = false;
+                                                      placementRotation = 0;
+                                                  })
+                                          });
+            i++;
+        }
+    };
+    load_available_subcircuits();
     auto start_component_placement_from_shortcut = [&](ComponentType t) {
         selectedComponentType = t;
         currentInteractionMode = InteractionMode::PLACE_COMPONENT;
@@ -2221,6 +2455,7 @@ int main(int argc, char* args[]) {
                     if (e.key.keysym.sym == SDLK_ESCAPE) {
                         currentInteractionMode = InteractionMode::NONE;
                         isDrawingWire = false;
+                        subcircuit_terminal_points.clear();
                     }
                     else if (currentInteractionMode == InteractionMode::NONE) {
                         switch(e.key.keysym.sym) {
@@ -2248,20 +2483,42 @@ int main(int argc, char* args[]) {
                         if (currentInteractionMode == InteractionMode::PLACE_LABEL) { labels.push_back({ "", snappedPoint }); editingLabel = &labels.back(); textInputBuffer = ""; currentInteractionMode = InteractionMode::EDITING_LABEL_TEXT; SDL_StartTextInput(); }
                         else if (currentInteractionMode == InteractionMode::PLACE_GND_LABEL) { labels.push_back({ "GND", snappedPoint, {}, 0 }); schematicModified = true; currentInteractionMode = InteractionMode::NONE; }
                         else if (currentInteractionMode == InteractionMode::WIRING) { firstInteractionPoint = snappedPoint; isDrawingWire = true; }
+                        else if (currentInteractionMode == InteractionMode::SELECT_SUBCIRCUIT_NODES) {
+                            subcircuit_terminal_points.push_back(snappedPoint);
+                            if (subcircuit_terminal_points.size() == 2) {
+                                cout << "Two nodes selected. Calculating Thevenin equivalent..." << endl;
+                                calculate_and_save_thevenin_subcircuit(dialogFields[0].buffer);
+                                load_available_subcircuits();
+                                currentInteractionMode = InteractionMode::NONE;
+                                subcircuit_terminal_points.clear();
+                                close_dialog();
+                            }
+                        }
                         else if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
                             Component newComp = { selectedComponentType, {}, {}, generate_component_name(selectedComponentType), "", placementRotation };
-                            get_component_defaults(newComp.type, newComp.value);
+                            if (selectedComponentType == ComponentType::SUBCIRCUIT) {
+                                newComp.value = selectedSubcircuitFilename;
+                            } else {
+                                get_component_defaults(newComp.type, newComp.value);
+                            }
                             int half_len = COMPONENT_DEFAULT_LENGTH / 2;
-                            if (placementRotation == 0) { newComp.node1 = { snappedPoint.x - half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x + half_len, snappedPoint.y }; }
-                            else if (placementRotation == 90) { newComp.node1 = { snappedPoint.x, snappedPoint.y - half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y + half_len }; }
-                            else if (placementRotation == 180) { newComp.node1 = { snappedPoint.x + half_len, snappedPoint.y }; newComp.node2 = { snappedPoint.x - half_len, snappedPoint.y }; }
-                            else { newComp.node1 = { snappedPoint.x, snappedPoint.y + half_len }; newComp.node2 = { snappedPoint.x, snappedPoint.y - half_len }; }
+                            if (placementRotation == 0 || placementRotation == 180) {
+                                newComp.node1 = { snappedPoint.x - half_len, snappedPoint.y };
+                                newComp.node2 = { snappedPoint.x + half_len, snappedPoint.y };
+                            } else {
+                                newComp.node1 = { snappedPoint.x, snappedPoint.y - half_len };
+                                newComp.node2 = { snappedPoint.x, snappedPoint.y + half_len };
+                            }
                             components.push_back(newComp);
                             schematicModified = true;
-                            editingComponent = &components.back();
-                            textInputBuffer = editingComponent->value;
-                            currentInteractionMode = InteractionMode::EDITING_COMPONENT_VALUE;
-                            SDL_StartTextInput();
+                            if (selectedComponentType != ComponentType::SUBCIRCUIT) {
+                                editingComponent = &components.back();
+                                textInputBuffer = editingComponent->value;
+                                currentInteractionMode = InteractionMode::EDITING_COMPONENT_VALUE;
+                                SDL_StartTextInput();
+                            } else {
+                                currentInteractionMode = InteractionMode::NONE;
+                            }
                         }
                         else if (currentInteractionMode == InteractionMode::DELETE_ITEM) {
                             const double DELETE_THRESHOLD_SQ = 10 * 10;
@@ -2288,6 +2545,7 @@ int main(int argc, char* args[]) {
                 }
                 if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.handle_event(&e);
                 if (isComponentsMenuOpen) for (auto& i : componentMenuItems) i.button.handle_event(&e);
+                if (isSubcircuitsMenuOpen) for (auto& i : subcircuitMenuItems) i.button.handle_event(&e);
                 if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.handle_event(&e);
                 for (auto& b : topBarButtons) b.handle_event(&e);
             } else if (currentAppState == AppState::RESULTS_VIEW) {
@@ -2444,13 +2702,9 @@ int main(int argc, char* args[]) {
                     if (e.type == SDL_KEYDOWN) {
                         if (e.key.keysym.sym == SDLK_RIGHT) {
                             if (last_simulated_circuit) {
-                                const bool is_tran = last_simulated_circuit->tran_solved;
-                                const bool is_dc = last_simulated_circuit->dc_sweep_solved;
-                                const bool is_ac = last_simulated_circuit->ac_sweep_solved;
-                                const bool is_phase = last_simulated_circuit->phase_sweep_solved;
-                                const auto& results = is_tran ? last_simulated_circuit->tran_results :
-                                                      is_dc ? last_simulated_circuit->dc_sweep_results :
-                                                      is_ac ? last_simulated_circuit->ac_sweep_results :
+                                const auto& results = last_simulated_circuit->tran_solved ? last_simulated_circuit->tran_results :
+                                                      last_simulated_circuit->dc_sweep_solved ? last_simulated_circuit->dc_sweep_results :
+                                                      last_simulated_circuit->ac_sweep_solved ? last_simulated_circuit->ac_sweep_results :
                                                       last_simulated_circuit->phase_sweep_results;
                                 if (!results.empty() && cursor_index < (int)results.size() - 1) {
                                     cursor_index++;
@@ -2500,13 +2754,21 @@ int main(int argc, char* args[]) {
             if (currentInteractionMode == InteractionMode::PLACE_COMPONENT) {
                 int mx, my; SDL_GetMouseState(&mx, &my);
                 SDL_Point center = snap_to_grid(mx, my);
-                SDL_Texture* icon = nullptr;
-                for (const auto& item : componentMenuItems) if (item.type == selectedComponentType) icon = item.iconTexture;
-                if (icon) {
-                    SDL_SetTextureAlphaMod(icon, 150);
-                    SDL_Rect dest = { center.x - COMPONENT_DEFAULT_LENGTH / 2, center.y - COMPONENT_DEFAULT_LENGTH / 2, COMPONENT_DEFAULT_LENGTH, COMPONENT_DEFAULT_LENGTH };
-                    SDL_RenderCopyEx(renderer, icon, nullptr, &dest, placementRotation, nullptr, SDL_FLIP_NONE);
-                    SDL_SetTextureAlphaMod(icon, 255);
+                if (selectedComponentType == ComponentType::SUBCIRCUIT) {
+                    int width = COMPONENT_DEFAULT_LENGTH;
+                    int height = COMPONENT_DEFAULT_LENGTH * 1.5;
+                    SDL_Rect box_rect = {center.x - width/2, center.y - height/2, width, height};
+                    SDL_SetRenderDrawColor(renderer, 0x33, 0x66, 0x99, 150);
+                    SDL_RenderFillRect(renderer, &box_rect);
+                } else {
+                    SDL_Texture* icon = nullptr;
+                    for (const auto& item : componentMenuItems) if (item.type == selectedComponentType) icon = item.iconTexture;
+                    if (icon) {
+                        SDL_SetTextureAlphaMod(icon, 150);
+                        SDL_Rect dest = { center.x - COMPONENT_DEFAULT_LENGTH / 2, center.y - COMPONENT_DEFAULT_LENGTH / 2, COMPONENT_DEFAULT_LENGTH, COMPONENT_DEFAULT_LENGTH };
+                        SDL_RenderCopyEx(renderer, icon, nullptr, &dest, placementRotation, nullptr, SDL_FLIP_NONE);
+                        SDL_SetTextureAlphaMod(icon, 255);
+                    }
                 }
             }
             SDL_Rect topBarRect = { 0, 0, SCREEN_WIDTH, TOP_BAR_HEIGHT };
@@ -2516,7 +2778,7 @@ int main(int argc, char* args[]) {
             if (isFileMenuOpen) for (auto& b : fileMenuButtons) b.render(renderer, uiFont);
             if (isSimulateMenuOpen) for (auto& b : simulateMenuButtons) b.render(renderer, uiFont);
             if (isComponentsMenuOpen) {
-                SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 3 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
+                SDL_Rect menuPanel = { 205, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 2 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
                 SDL_SetRenderDrawColor(renderer, 0x3A, 0x3A, 0x3A, 0xFF);
                 SDL_RenderFillRect(renderer, &menuPanel);
                 for (auto& item : componentMenuItems) {
@@ -2535,6 +2797,18 @@ int main(int argc, char* args[]) {
                     }
                 }
             }
+            if (isSubcircuitsMenuOpen) {
+                SDL_Rect menuPanel = { 365, 35, 4 * (COMP_ITEM_W + COMP_ITEM_PAD) + 5, 2 * (COMP_ITEM_H + COMP_ITEM_PAD) + 5 };
+                SDL_SetRenderDrawColor(renderer, 0x3A, 0x3A, 0x3A, 0xFF);
+                SDL_RenderFillRect(renderer, &menuPanel);
+                for (auto& item : subcircuitMenuItems) {
+                    item.button.render(renderer, uiFont);
+                    SDL_Rect box_rect = {item.button.m_position.x + 45, item.button.m_position.y + 10, 60, 80};
+                    SDL_SetRenderDrawColor(renderer, 0x33, 0x66, 0x99, 0xFF);
+                    SDL_RenderFillRect(renderer, &box_rect);
+                    render_text(renderer, uiFont, item.name, item.button.m_position.x + item.button.m_position.w/2, item.button.m_position.y + 75, {255, 255, 255, 255}, true);
+                }
+            }
             if (currentInteractionMode == InteractionMode::DIALOG_ACTIVE) render_dialog(renderer, uiFont);
         } else if (currentAppState == AppState::RESULTS_VIEW) {
             render_results_view(renderer, uiFont, resultsViewButtons, autoBrowseButton, componentMenuItems);
@@ -2551,4 +2825,61 @@ int main(int argc, char* args[]) {
     TTF_Quit();
     SDL_Quit();
     return 0;
+}
+void calculate_and_save_thevenin_subcircuit(const string& filename) {
+    try {
+        if (subcircuit_terminal_points.size() != 2) {
+            throw runtime_error("Exactly two terminal nodes must be selected for Thevenin calculation.");
+        }
+        auto point_to_key = [](SDL_Point p) { return to_string(p.x) + "," + to_string(p.y); };
+        string ground_node_name;
+        auto node_map = resolve_node_names(ground_node_name);
+        string term1_name = node_map.at(point_to_key(subcircuit_terminal_points[0]));
+        string term2_name = node_map.at(point_to_key(subcircuit_terminal_points[1]));
+        cout << "Calculating V_oc (V_th)..." << endl;
+        auto circuit_voc = create_spice_circuit_from_gui();
+        SpiceEngine::ResultPoint voc_results;
+        circuit_voc->perform_dc_operating_point(voc_results);
+        if (voc_results.empty() && !circuit_voc->components.empty()) {
+            throw runtime_error("Failed to solve for V_oc. The circuit might be unstable or unsolvable.");
+        }
+        double v1_oc = circuit_voc->get_voltage_at(term1_name, voc_results);
+        double v2_oc = circuit_voc->get_voltage_at(term2_name, voc_results);
+        double v_th = v1_oc - v2_oc;
+        cout << "V_th = " << v_th << " V" << endl;
+        cout << "Calculating R_th..." << endl;
+        auto circuit_rth = create_spice_circuit_from_gui();
+        double r_th;
+        for (auto& comp : circuit_rth->components) {
+            if (auto vs = dynamic_cast<SpiceEngine::VoltageSource*>(comp.get())) {
+                vs->value = 0;
+                vs->dc_offset = 0;
+            } else if (auto is = dynamic_cast<SpiceEngine::CurrentSource*>(comp.get())) {
+                is->value = 0;
+            }
+        }
+        circuit_rth->add_component(make_unique<SpiceEngine::CurrentSource>("I_TEST", term1_name, term2_name, "1"));
+        SpiceEngine::ResultPoint rth_results;
+        circuit_rth->perform_dc_operating_point(rth_results);
+        if (rth_results.empty() && !circuit_rth->components.empty()) {
+            throw runtime_error("Failed to solve for R_th. The circuit might be unstable or unsolvable.");
+        }
+        double v1_test = circuit_rth->get_voltage_at(term1_name, rth_results);
+        double v2_test = circuit_rth->get_voltage_at(term2_name, rth_results);
+        r_th = abs(v1_test - v2_test);
+        cout << "R_th = " << r_th << " Ohms" << endl;
+        string final_filename = filename;
+        if (final_filename.length() < 4 || to_lower_util(final_filename.substr(final_filename.length() - 4)) != ".sub") {
+            final_filename += ".sub";
+        }
+        ofstream outFile(SUBCIRCUITS_PATH + final_filename);
+        if (!outFile.is_open()) {
+            throw runtime_error("Could not open file to save subcircuit: " + final_filename);
+        }
+        outFile << "THEVENIN," << v_th << "," << r_th << endl;
+        outFile.close();
+        cout << "Subcircuit saved successfully to " << final_filename << endl;
+    } catch (const exception& e) {
+        cerr << "ERROR creating subcircuit: " << e.what() << endl;
+    }
 }
