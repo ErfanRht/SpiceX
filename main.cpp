@@ -9,23 +9,17 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #endif
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cmath>
+#include <bits/stdc++.h>
 #include <functional>
-#include <map>
-#include <set>
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
-#include <sstream>
-#include <iomanip>
-#include <fstream>
 #include <numeric>
 #include <cfloat>
 #include <complex>
 using namespace std;
+
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 const int TOP_BAR_HEIGHT = 40;
@@ -227,16 +221,16 @@ vector<string> get_files_in_directory(const string& path, const string& extensio
     FindClose(h_find);
 #else
     DIR *dir;
-    struct dirent *ent;
-    if ((dir = opendir(path.c_str())) != NULL) {
-        while ((ent = readdir(dir)) != NULL) {
-            string filename = ent->d_name;
-            if (filename.length() > extension.length() && filename.substr(filename.length() - extension.length()) == extension) {
-                 files.push_back(filename);
-            }
-        }
-        closedir(dir);
-    }
+     struct dirent *ent;
+     if ((dir = opendir(path.c_str())) != NULL) {
+         while ((ent = readdir(dir)) != NULL) {
+             string filename = ent->d_name;
+             if (filename.length() > extension.length() && filename.substr(filename.length() - extension.length()) == extension) {
+                  files.push_back(filename);
+             }
+         }
+         closedir(dir);
+     }
 #endif
     return files;
 }
@@ -2189,19 +2183,10 @@ void render_results_view(SDL_Renderer* renderer, TTF_Font* font, vector<Button>&
         SDL_GetMouseState(&mx, &my);
         if (currentInteractionMode == InteractionMode::PROBE_CURRENT) {
             render_text(renderer, font, "Click on a component to probe its current. Press ESC to cancel.", SCREEN_WIDTH / 2, 20, {255, 255, 0, 255}, true);
-            circleRGBA(renderer, mx, my, 15, 255, 0, 0, 255);
-            lineRGBA(renderer, mx - 20, my, mx + 20, my, 255, 0, 0, 255);
-            lineRGBA(renderer, mx, my - 20, mx, my + 20, 255, 0, 0, 255);
         } else if (currentInteractionMode == InteractionMode::PROBE_VOLTAGE) {
             render_text(renderer, font, "Click on a node to probe its voltage. Press ESC to cancel.", SCREEN_WIDTH / 2, 20, {255, 255, 0, 255}, true);
-            thickLineRGBA(renderer, mx, my, mx, my - 20, 3, 0, 255, 0, 255);
-            thickLineRGBA(renderer, mx, my, mx - 14, my + 14, 3, 0, 255, 0, 255);
-            thickLineRGBA(renderer, mx, my, mx + 14, my + 14, 3, 0, 255, 0, 255);
         } else {
             render_text(renderer, font, "Click on a component to probe its power. Press ESC to cancel.", SCREEN_WIDTH / 2, 20, {255, 255, 0, 255}, true);
-            Sint16 vx[] = { (Sint16)(mx), (Sint16)(mx-8), (Sint16)(mx+2), (Sint16)(mx-2), (Sint16)(mx+8), (Sint16)(mx-2), (Sint16)(mx) };
-            Sint16 vy[] = { (Sint16)(my-15), (Sint16)(my-5), (Sint16)(my-5), (Sint16)(my+5), (Sint16)(my+5), (Sint16)(my+15), (Sint16)(my+5) };
-            filledPolygonRGBA(renderer, vx, vy, 7, 255, 215, 0, 255);
         }
     }
     if(show_trace_dialog) render_trace_dialog(renderer, font);
