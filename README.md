@@ -34,7 +34,7 @@ sh
     git push origin feature/my-new-feature
 
 5. **Create a new Pull Request**
-    
+
 ## License
 This project is licensed under the [MIT License](https://github.com/ErfanRht/SpiceX/blob/master/LICENSE).
     
