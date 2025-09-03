@@ -14,6 +14,20 @@ Designed as a final project for the Object-Oriented Programming course at Sharif
 ## Powerful C++ Engine
 SpiceX is built from the ground up using C++ and the SDL2 library, providing a fast and responsive experience. It features an intuitive schematic editor and an interactive waveform viewer to plot simulation results, probe voltages/currents, and analyze circuit behavior in detail.
 
+## Screenshots
+<p align="center">
+    <img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/Screenshot1.png?raw=true" width="48%" />
+  &ensp;
+    <img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/Screenshot2.png?raw=true" width="48%" />
+  &ensp;
+</p>
+
+## Screenrecords
+<p float="center">
+  <img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/Screenrecord1.gif?raw=true" width="75%" />
+  &ensp;
+</p>
+
 ## Contribute
 I welcome contributions from the community! If you have an idea for an enhancement or have found a bug, you can raise a GitHub issue [here](https://github.com/ErfanRht/SpiceX/issues) or you can follow these steps to contribute:
 
