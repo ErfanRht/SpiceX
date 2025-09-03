@@ -24,7 +24,7 @@ SpiceX is built from the ground up using C++ and the SDL2 library, providing a f
 
 ## Screenrecords
 <p float="center">
-  <img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/Screenrecord1.gif?raw=true" width="75%" />
+  <img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/Screenrecord1.gif?raw=true" width="100%" />
   &ensp;
 </p>
 
