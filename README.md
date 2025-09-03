@@ -39,7 +39,7 @@ sh
 This project is licensed under the [MIT License](https://github.com/ErfanRht/SpiceX/blob/master/LICENSE).
     
 ## Author
-This C++ project is developed by [Erfan Rahmati](https://github.com/ErfanRht).
+This C++ project is developed by [Erfan Rahmati](https://github.com/ErfanRht) and [Ilia Ghaderi](https://github.com/ILIAGHADERI).
     
 ## Contact
 You can reach out to me directly at [erfanrht2005@gmail.com](mailto:<erfanrht2005@gmail.com>).
