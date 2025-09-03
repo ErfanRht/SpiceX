@@ -9,7 +9,7 @@ SpiceX is an open-source electronic circuit simulator developed in C++ with the 
 Designed as a final project for the Object-Oriented Programming course at Sharif University of Technology, SpiceX allows you to build, simulate, and analyze electronic circuits with ease. From simple DC analysis to complex transient and AC sweeps, SpiceX provides the tools you need to bring your circuit designs to life.
 </p>
 
-<p align="center"><a href="https://www.google.com/search?q=https://github.com/ErfanRht/SpiceX/"><img src="https://github.com/SharifUniversityOfTechnology-EE-OOP/403170428-403102406.0/blob/main/assets/logo_cutted.png?raw=true" width="100%"/></a>
+<p align="center"><a href="https://www.google.com/search?q=https://github.com/ErfanRht/SpiceX/"><img src="https://github.com/ErfanRht/SpiceX/blob/main/assets/logo_cutted.png?raw=true" width="100%"/></a>
 
 ## Powerful C++ Engine
 SpiceX is built from the ground up using C++ and the SDL2 library, providing a fast and responsive experience. It features an intuitive schematic editor and an interactive waveform viewer to plot simulation results, probe voltages/currents, and analyze circuit behavior in detail.
